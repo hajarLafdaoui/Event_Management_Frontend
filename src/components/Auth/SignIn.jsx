@@ -1,0 +1,75 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../../api/api';
+
+const SignIn = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await api.post('/auth/login', {
+        email,
+        password
+      });
+
+      // Save token to localStorage or context
+      localStorage.setItem('token', response.data.access_token);
+      
+      console.log('Login successful:', response.data);
+      
+      // Redirect to dashboard or home
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="auth-container">
+      <h2>Sign In</h2>
+      {error && <div className="error-message">{error}</div>}
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Signing In...' : 'Sign In'}
+        </button>
+      </form>
+      <div className="auth-links">
+        <button onClick={() => navigate('/reset-password')}>Forgot Password?</button>
+        <button onClick={() => navigate('/signup')}>Create Account</button>
+      </div>
+      <div className="social-login">
+    
+      </div>
+    </div>
+  );
+};
+
+export default SignIn;
