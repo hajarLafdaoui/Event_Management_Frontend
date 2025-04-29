@@ -7,9 +7,9 @@ import EmailVerification from './components/Auth/EmailVerification';
 import Dashboard from './components/Dashboard/Dashboard';
 import PrivateRoute from './PrivateRoute';
 import ResendVerification from './components/Auth/ResendVerification';
-import Profile from './components/Auth/Profile';
 import UserDetails from './components/Auth/UserDetails';
 import UpdatePassword from './components/Auth/UpdatePassword';
+import UpdateProfile from './components/Auth/UpdateProfile';
 
 function App() {
   return (
@@ -25,13 +25,13 @@ function App() {
 
 <Route path="/verify-email/:id/:hash" element={<EmailVerification />} />
 <Route path="/resend-verification" element={<ResendVerification />} />
+<Route path="/update-profile" element={<UpdateProfile />} />
 
 
         
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/update-password" element={<UpdatePassword />} />
           <Route path="/user-details" element={<UserDetails />} />          {/* Add other protected routes here */}
         </Route>

@@ -18,9 +18,7 @@ const Dashboard = () => {
     }
   }
 
-  const viewProfile = () => {
-    navigate('/profile')
-  }
+ 
 
   const updatePassword = () => {
     navigate('/update-password')
@@ -42,13 +40,7 @@ const Dashboard = () => {
           Logout
         </button>
         
-        <button 
-          onClick={viewProfile}
-          style={{ padding: '10px', cursor: 'pointer' }}
-        >
-          See Profile
-        </button>
-        
+     
         <button 
           onClick={updatePassword}
           style={{ padding: '10px', cursor: 'pointer' }}
