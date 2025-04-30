@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 import api from '../../api/api';
+import SocialAuthButtons from './SocialAuthButtons.jsx';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -32,7 +33,7 @@ const SignUp = () => {
 
     try {
       const response = await api.post('/auth/register', formData);
-      
+
       setSuccess(true);
       // You might want to automatically log the user in here
       // Or redirect to login page with success message
@@ -139,8 +140,10 @@ const SignUp = () => {
         <button onClick={() => navigate('/signin')}>Already have an account? Sign In</button>
       </div>
       <div className="social-login">
-    
-    </div>
+        <p>Or sign up with:</p>
+        <SocialAuthButtons type="signup" />
+      </div>
+
     </div>
   );
 };

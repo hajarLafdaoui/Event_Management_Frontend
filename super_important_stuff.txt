@@ -1,2 +1,7 @@
 npm install axios
 npm install react-router-dom
+
+//29/04
+# Install the correct packages with legacy peer deps flag
+npm install @react-oauth/google @greatsumini/react-facebook-login --legacy-peer-deps
+d> npm install @react-oauth/google react-facebook-login --legacy-peer-deps

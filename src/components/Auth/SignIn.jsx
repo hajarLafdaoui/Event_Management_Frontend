@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
+import SocialAuthButtons from './SocialAuthButtons.jsx';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -22,9 +23,9 @@ const SignIn = () => {
 
       // Save token to localStorage or context
       localStorage.setItem('token', response.data.access_token);
-      
+
       console.log('Login successful:', response.data);
-      
+
       // Redirect to dashboard or home
       navigate('/dashboard');
     } catch (err) {
@@ -65,8 +66,10 @@ const SignIn = () => {
         <button onClick={() => navigate('/reset-password')}>Forgot Password?</button>
         <button onClick={() => navigate('/signup')}>Create Account</button>
       </div>
+      // Add to your SignIn component, near the form closing tag
       <div className="social-login">
-    
+        <p>Or sign in with:</p>
+        <SocialAuthButtons type="signin" />
       </div>
     </div>
   );

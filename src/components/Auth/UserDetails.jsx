@@ -13,7 +13,7 @@ const UserDetails = () => {
         setUser(response.data)
       } catch (error) {
         console.error('Failed to fetch user details:', error)
-        navigate('/signin')
+        // navigate('/signin')
       }
     }
     fetchUserDetails()

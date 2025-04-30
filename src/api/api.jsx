@@ -1,26 +1,39 @@
-// src/api/api.js                 
-
 import axios from 'axios';
 
-// Create an axios instance
+
+// import { useNavigate } from 'react-router-dom';
+
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api', // Replace with your backend URL
+  baseURL: 'http://localhost:8000/api',
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json'  },
+    'Accept': 'application/json'
+  },
 });
 
-// You can also add interceptors if needed (optional)
-// For example, to add token to every request
+// api.js
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token'); // Or wherever you store your token
+    const token = localStorage.getItem('token');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+
+      // navigate('/signin');
+    }
     return Promise.reject(error);
   }
 );
