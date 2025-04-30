@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import FacebookLogin from 'react-facebook-login';
 import api from '../../api/api';
 import { useNavigate } from 'react-router-dom';
+// import facebookIcon from '../../assets/icons/facebook.png'; // Make sure to import your Facebook icon
 
 const SocialAuthButtons = ({ type = 'signin' }) => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const SocialAuthButtons = ({ type = 'signin' }) => {
     try {
       if (response.accessToken) {
         const authResponse = await api.post('/auth/facebook/callback', {
-          accessToken: response.accessToken
+          accessToken: response.accessToken,
         });
 
         localStorage.setItem('token', authResponse.data.access_token);
@@ -41,7 +42,7 @@ const SocialAuthButtons = ({ type = 'signin' }) => {
       }
     } catch (error) {
       console.error('Facebook authentication failed:', error);
-      alert(error.response?.data?.message || 'Facebook login failed. Please try again.');
+      alert(error.response?.data?.error || 'Facebook login failed. Please try again.');
     }
   }, [navigate]);
 
@@ -59,10 +60,11 @@ const SocialAuthButtons = ({ type = 'signin' }) => {
               alert('Google login failed. Please try again.');
             }}
             useOneTap={type === 'signin'}
+            ux_mode="redirect"  // Change from popup to redirect
+
             text={type === 'signin' ? 'signin_with' : 'signup_with'}
             theme="filled_blue"
             size="large"
-            ux_mode="popup"
             cookiePolicy="single_host_origin"
           />
         </div>
@@ -70,19 +72,23 @@ const SocialAuthButtons = ({ type = 'signin' }) => {
 
       <div className="social-auth-button">
         <FacebookLogin
-          appId="9035725106527424"
+          appId="9035725106527424" // Using your new Facebook app ID
           autoLoad={false}
           fields="name,email,picture"
           callback={handleFacebookResponse}
-          render={renderProps => (
-            <button
-              onClick={renderProps.onClick}
-              className="facebook-login-btn"
-              disabled={renderProps.isProcessing}
-            >
-              {type === 'signin' ? 'Continue with Facebook' : 'Sign up with Facebook'}
-            </button>
-          )}
+          cssClass="facebook-btn"
+          disableMobileRedirect={true}  // Add this line
+
+          textButton={
+            <>
+              {/* <img 
+                src={facebookIcon} 
+                alt="Facebook" 
+                style={{ width: '20px', height: '20px', marginRight: '10px' }} 
+              /> */}
+              {type === 'signin' ? 'Login with Facebook' : 'Sign up with Facebook'}
+            </>
+          }
           onFailure={(error) => {
             console.error('Facebook login failed:', error);
             alert('Facebook login failed. Please try again.');

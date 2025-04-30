@@ -24,7 +24,6 @@ const SignIn = () => {
       // Save token to localStorage or context
       localStorage.setItem('token', response.data.access_token);
 
-      console.log('Login successful:', response.data);
 
       // Redirect to dashboard or home
       navigate('/dashboard');

@@ -42,7 +42,8 @@ const UpdateProfile = () => {
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-console.log('Profile Picture Base64:', formData.profile_picture);const handleImageChange = (e) => {
+// console.log('Profile Picture Base64:', formData.profile_picture);
+const handleImageChange = (e) => {
   if (e.target.files && e.target.files[0]) {
     const file = e.target.files[0];
 

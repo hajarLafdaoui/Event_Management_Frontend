@@ -12,7 +12,7 @@ const UserDetails = () => {
         const response = await api.get('/auth/me')
         setUser(response.data)
       } catch (error) {
-        console.error('Failed to fetch user details:', error)
+        // console.error('Failed to fetch user details:', error)
         // navigate('/signin')
       }
     }
