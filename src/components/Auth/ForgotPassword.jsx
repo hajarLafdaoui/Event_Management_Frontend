@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from '../../api/api';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -12,17 +12,20 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+    setError('');
+    setMessage('');
+
     try {
-      await axios.post('/auth/forgot-password', { email });
-      setMessage('Password reset link sent to your email');
-      setError('');
+      const response = await api.post('/auth/forgot-password', {
+        email
+      });
+
+      setMessage(response.data.message);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to send reset link');
-      setMessage('');
-    } finally {
-      setLoading(false);
-    }
+      console.log(err);
+      
+    } 
   };
 
   return (
@@ -44,7 +47,9 @@ const ForgotPassword = () => {
           {loading ? 'Sending...' : 'Send Reset Link'}
         </button>
       </form>
-      <button onClick={() => navigate('/signin')}>Back to Sign In</button>
+      <div className="auth-links">
+        <button onClick={() => navigate('/signin')}>Back to Sign In</button>
+      </div>
     </div>
   );
 };

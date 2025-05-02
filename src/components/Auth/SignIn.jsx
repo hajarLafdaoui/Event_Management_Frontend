@@ -61,11 +61,10 @@ const SignIn = () => {
           {loading ? 'Signing In...' : 'Sign In'}
         </button>
       </form>
-      <div className="auth-links">
-        <button onClick={() => navigate('/reset-password')}>Forgot Password?</button>
-        <button onClick={() => navigate('/signup')}>Create Account</button>
-      </div>
-      // Add to your SignIn component, near the form closing tag
+<div className="auth-links">
+  <button onClick={() => navigate('/forgot-password')}>Forgot Password?</button>
+  <button onClick={() => navigate('/signup')}>Create Account</button>
+</div>
       <div className="social-login">
         <p>Or sign in with:</p>
         <SocialAuthButtons type="signin" />

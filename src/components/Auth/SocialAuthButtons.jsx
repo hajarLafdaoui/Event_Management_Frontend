@@ -60,7 +60,7 @@ const SocialAuthButtons = ({ type = 'signin' }) => {
               alert('Google login failed. Please try again.');
             }}
             useOneTap={type === 'signin'}
-            ux_mode="redirect"  // Change from popup to redirect
+            ux_mode="popup" // Change to popup
 
             text={type === 'signin' ? 'signin_with' : 'signup_with'}
             theme="filled_blue"

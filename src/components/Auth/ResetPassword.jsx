@@ -1,36 +1,50 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import api from '../../api/api';
 
 const ResetPassword = () => {
+  const [searchParams] = useSearchParams();
+  const [token, setToken] = useState('');
+  const [email, setEmail] = useState(searchParams.get('email') || '');
   const [password, setPassword] = useState('');
-  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const token = searchParams.get('token');
-  const email = searchParams.get('email');
+  useEffect(() => {
+    // Get token from URL if it's not passed as prop
+    const pathToken = window.location.pathname.split('/reset-password/')[1];
+    if (pathToken) {
+      setToken(pathToken);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     
+    if (password !== passwordConfirmation) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setMessage('');
+
     try {
-      await axios.post('/auth/reset-password', {
+      const response = await api.post('/auth/reset-password', {
         token,
         email,
         password,
-        password_confirmation
+        password_confirmation: passwordConfirmation
       });
-      setMessage('Password reset successfully');
-      setError('');
-      setTimeout(() => navigate('/signin'), 2000);
+
+      setMessage('Password reset successfully!');
+      setTimeout(() => navigate('/signin'), 3000);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to reset password');
-      setMessage('');
     } finally {
       setLoading(false);
     }
@@ -42,6 +56,16 @@ const ResetPassword = () => {
       {message && <div className="success-message">{message}</div>}
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            readOnly={!!searchParams.get('email')} // Make readonly if from URL
+          />
+        </div>
         <div className="form-group">
           <label>New Password</label>
           <input
@@ -56,7 +80,7 @@ const ResetPassword = () => {
           <label>Confirm New Password</label>
           <input
             type="password"
-            value={password_confirmation}
+            value={passwordConfirmation}
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             required
             minLength="8"
