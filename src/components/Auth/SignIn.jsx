@@ -21,12 +21,27 @@ const SignIn = () => {
         password
       });
 
-      // Save token to localStorage or context
+      // Save token and user data to localStorage or context
       localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
 
+      // Redirect based on role
+      const role = response.data.user?.role?.toLowerCase(); // assuming role is returned in the response
+      
+      switch(role) {
+        case 'admin':
+          navigate('/admin/dashboard');
+          break;
+        case 'vendor':
+          navigate('/vendor/dashboard');
+          break;
+        case 'client':
+          navigate('/client/dashboard');
+          break;
+        default:
+          navigate('/dashboard'); // fallback for unknown roles
+      }
 
-      // Redirect to dashboard or home
-      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     } finally {
@@ -61,10 +76,10 @@ const SignIn = () => {
           {loading ? 'Signing In...' : 'Sign In'}
         </button>
       </form>
-<div className="auth-links">
-  <button onClick={() => navigate('/forgot-password')}>Forgot Password?</button>
-  <button onClick={() => navigate('/signup')}>Create Account</button>
-</div>
+      <div className="auth-links">
+        <button onClick={() => navigate('/forgot-password')}>Forgot Password?</button>
+        <button onClick={() => navigate('/signup')}>Create Account</button>
+      </div>
       <div className="social-login">
         <p>Or sign in with:</p>
         <SocialAuthButtons type="signin" />
@@ -73,4 +88,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignIn

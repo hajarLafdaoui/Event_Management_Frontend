@@ -39,6 +39,10 @@ const UpdatePassword = () => {
   return (
     <div style={{ padding: '20px' }}>
       <h1>Update Password</h1>
+      If logged in via Google/Facebook (OAuth):
+      🔗 Show a link like: "Change password in your Google Account or Facebook Settings".
+
+
       {message && <div style={{ color: 'green' }}>{message}</div>}
       {error && <div style={{ color: 'red' }}>{error}</div>}
       

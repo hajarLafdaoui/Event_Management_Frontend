@@ -31,6 +31,9 @@ const ForgotPassword = () => {
   return (
     <div className="auth-container">
       <h2>Forgot Password</h2>
+      "Forgot Password" for Users Who Signed Up via Google/Facebook
+      "You signed up with Google/Facebook. Please reset your password there:"
+      Google Account Recovery | Facebook Password Reset
       {message && <div className="success-message">{message}</div>}
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>

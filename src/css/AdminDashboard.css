@@ -1,0 +1,900 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main layout */
+.admin-dashboard {
+    display: flex;
+    min-height: 100vh;
+    background-color: #ffffff; /* Changed from #f5f7fa to white */
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 260px;
+    background-color: #f5f7fa; /* Changed from white to grey */
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    margin: 8px;
+    overflow: hidden;
+}
+
+.sidebar.collapsed {
+    width: 80px;
+}
+
+.sidebar-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    background-color: #f5f7fa; /* Changed from white to grey */
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.logo-icon {
+    width: 36px;
+    height: 36px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ 
+    margin-right: 12px;
+
+}
+.e-icon{
+     width: 32px;
+    height: 32px;
+}
+
+.Eventura-text {
+   width: 90px;
+    height: 30px;
+
+}
+
+.sidebar.collapsed .logo-text {
+    display: none;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 16px 0;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+}
+/* Add these styles to your existing CSS */
+
+.sidebar-nav li {
+    position: relative; /* Add this for the border positioning */
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 0 8px;
+    border-radius: 8px;
+    overflow: hidden; /* This ensures the border doesn't overflow rounded corners */
+}
+
+.sidebar-nav li.active {
+    color: #2A0637 ;
+}
+
+.sidebar-nav li.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #2A0637 ;
+    border-radius: 0 4px 4px 0;
+}
+
+.sidebar-nav li.active .nav-icon {
+    color: #2A0637 ;
+}
+
+/* Optional: Add a smooth transition for the border */
+.sidebar-nav li {
+    transition: all 0.3s ease;
+}
+
+/* Optional: Enhance hover effect */
+.sidebar-nav span:hover:not(.active) {
+    /* color: rgba(0, 71, 55, 0.1) !important; Slightly tinted background */
+    color: #2A0637   ; /* Underline effect on hover */
+    
+    
+}
+
+/* Optional: Make the active state more prominent */
+.sidebar-nav li.active {
+    font-weight: 600;
+}
+
+/* Make the active item stand out more */
+.sidebar-nav li.active {
+    background-color: rgba(0, 71, 55, 0.1); /* Slightly tinted background */
+}
+
+/* Smooth transition for the icon color */
+.nav-icon {
+    transition: color 0.3s ease;
+}
+
+/* Highlight the text on active state */
+.sidebar-nav li.active .nav-text {
+    color: #2A0637 ;
+    font-weight: 600;
+}
+.nav-icon {
+    margin-right: 12px;
+    font-size: 20px;
+    color: #64748b;
+}
+
+.nav-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.sidebar.collapsed .nav-text {
+    display: none;
+}
+
+.sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    color: #64748b;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #e2e8f0; /* Darker grey for hover */
+    color: #2A0637 ; /* Changed to new accent color */
+}
+
+.logout-icon {
+    margin-right: 12px;
+    font-size: 20px;
+}
+
+.sidebar.collapsed .logout-btn span:not(.logout-icon) {
+    display: none;
+}
+
+/* Main content styles */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    height: 64px;
+}
+.main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 8px 8px 8px 0;
+    border-radius: 12px 0 0 12px;
+}
+
+.top-header {
+    height: 72px;
+    background-color: #f5f7fa; /* Changed from white to grey */
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    border-bottom: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin: 0 8px 8px !important;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.page-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+
+}
+.page-title-spans{
+    display: flex;
+    align-items: center;
+
+    gap: 2px;
+}
+.slash-event{
+    font-size: 14px;
+}
+.page-title-span{
+    font-size: 14px;
+    font-weight: 600;
+    color: #714897 ;
+}
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #ffffff; /* Changed from #f8f9fa to white */
+    border-radius: 20px;
+    padding: 6px 14px;
+    margin: 0 20px;
+    flex: 0.5;
+    transition: all 0.3s;
+    
+}
+
+.search-box:focus-within {
+    box-shadow: 0 0 0 2px  rgba(0, 71, 55, 0.1); /* Slightly tinted background */;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    flex-grow: 1;
+    padding: 4px;
+    background: transparent;
+    color: #2d3748;
+}
+
+.search-box input::placeholder {
+    color: #94a3b8;
+}
+
+.search-icon {
+    margin-right: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    background: none;
+    border: none;
+    outline: none;
+    color: #64748b;
+}
+
+.user-area {
+    display: flex;
+    align-items: center;
+}
+
+.notification-bell {
+    background-color: #ffffff ;
+padding: 8px;
+border-radius: 50%;
+
+    cursor: pointer;
+        transition: all 0.3s; 
+
+
+}
+
+.notification-bell:hover {
+
+}
+
+.bell-icon {
+width: 20px;
+height: 20px;
+
+}
+
+.notification-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: #ef4444;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.user-profile:hover {
+    /* background-color: #e2e8f0; Darker grey for hover */
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+    object-fit: cover;
+    border: 2px solid #e2e8f0;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* Content area */
+.content-wrapper {
+    flex: 1 !important;
+    height: 100%;
+    padding: 0 10px;
+}
+
+.content-area {
+    background-color: #f5f7fa; /* Changed from white to grey */
+    padding: 24px;
+    border-radius: 8px;
+    min-height: calc(100vh - 120px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    
+}
+
+/* Add these styles to your existing CSS */
+
+/* Improved toggle button with animations */
+.toggle-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 20px;
+    color: #64748b;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 8px;
+    border-radius: 6px;
+    position: relative;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-btn:hover {
+    background-color: rgba(0, 71, 55, 0.1);
+    color: #2A0637 ;
+    transform: scale(1.1);
+}
+
+.toggle-btn::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: rgba(0, 71, 55, 0.1);
+    transform: scale(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-btn:hover::before {
+    transform: scale(1);
+}
+
+.toggle-btn svg {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animation for when sidebar is collapsed */
+.sidebar {
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Optional: Add a subtle scale animation when clicking */
+.toggle-btn:active {
+    transform: scale(0.95);
+}
+
+/* Enhanced menu icon animation */
+.toggle-btn .menu-icon {
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.toggle-btn .close-icon {
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+/* When collapsed, rotate the menu icon slightly */
+.sidebar:not(.collapsed) .toggle-btn .menu-icon {
+    transform: rotate(0deg);
+}
+
+.sidebar.collapsed .toggle-btn .menu-icon {
+    transform: rotate(90deg);
+}
+
+/* When expanded, rotate the close icon slightly */
+.sidebar:not(.collapsed) .toggle-btn .close-icon {
+    transform: rotate(0deg);
+}
+
+.sidebar.collapsed .toggle-btn .close-icon {
+    transform: rotate(-90deg);
+}
+
+
+/* CSS */
+/* Enhanced circle toggle animation - Three dots version */
+.circle-toggle {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  margin-right: 12px;
+}
+
+.circle-toggle:hover {
+  background-color: rgba(0, 71, 55, 0.1);
+}
+
+.circle-icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.circle-icon span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #2A0637 ;
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  left: 9px;
+}
+
+/* Initial state - three dots vertical */
+.circle-icon span:nth-child(1) {
+  top: 0;
+}
+
+.circle-icon span:nth-child(2) {
+  top: 9px;
+}
+
+.circle-icon span:nth-child(3) {
+  top: 18px;
+}
+
+/* Collapsed state - three dots horizontal */
+.circle-icon.collapsed {
+  transform: rotate(90deg);
+}
+
+.circle-icon.collapsed span:nth-child(1) {
+  transform: translateX(-9px) translateY(9px);
+}
+
+.circle-icon.collapsed span:nth-child(2) {
+  transform: translateX(0) translateY(0);
+}
+
+.circle-icon.collapsed span:nth-child(3) {
+  transform: translateX(9px) translateY(-9px);
+}
+
+/* Animation states */
+.circle-icon.collapsing span {
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.circle-icon.expanding span {
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.1s;
+}
+
+/* Pulse animation on hover */
+.circle-toggle:hover .circle-icon span {
+  animation: pulse 1.5s infinite;
+}
+
+.circle-toggle:hover .circle-icon span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.circle-toggle:hover .circle-icon span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
+}
+
+
+
+/* 
+ */
+ /* Add these media queries at the end of your existing CSS */
+
+/* Tablet styles (768px and below) */
+/* Mobile Header Styles */
+.mobile-header {
+  display: none; /* Hidden by default on desktop */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 60px;
+  background-color: #f5f7fa;
+  padding: 0 16px;
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.mobile-header-content {
+  display: flex;
+  width: 100% !important;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hamburger-menu {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 24px;
+}
+
+.hamburger-menu span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: #2A0637 ;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-menu.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+.mobile-search {
+  flex: 1;
+  margin: 0 16px;
+  position: relative;
+}
+
+.mobile-search input {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background-color: white;
+  padding-left: 35px;
+}
+
+.mobile-search .search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+}
+
+.mobile-user-area {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-notification-bell {
+  margin-right: 12px;
+  padding: 6px;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.mobile-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2e8f0;
+}
+
+/* Mobile Sidebar */
+.sidebar.mobile-active {
+  transform: translateX(0);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding-top: 60px; /* Make space for fixed header */
+  }
+  .sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 250px;
+    height: calc(100vh - 60px);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    margin: 0;
+    border-radius: 0;
+    background-color: #f5f7fa;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+
+  .sidebar.mobile-active {
+    transform: translateX(0);
+  }
+
+  .sidebar-nav li {
+    padding: 12px 20px;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .sidebar-nav li .nav-text {
+    display: block !important;
+    margin-left: 12px;
+  }
+
+  .sidebar-header {
+    display: none; /* Hide logo in mobile sidebar */
+  }
+
+  .sidebar-footer {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+
+  /* Ensure nav items show both icon and text */
+  .sidebar-nav li {
+    justify-content: flex-start;
+  }
+
+  .nav-icon {
+    margin-right: 12px;
+    font-size: 20px;
+  }
+  
+  
+  .mobile-header {
+    display: flex;
+  }
+  
+  .top-header {
+    display: none;
+  }
+  
+  .main {
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .sidebar-nav li .nav-text {
+    display: block !important;
+  }
+  
+  .sidebar-footer {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-header {
+    display: none;
+  }
+  
+  .sidebar {
+    transform: none !important;
+  }
+}
+
+/* Mobile Sidebar Styles */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 250px;
+    height: calc(100vh - 60px);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    margin: 0;
+    border-radius: 0;
+    background-color: #f5f7fa;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+
+  .sidebar.mobile-active {
+    transform: translateX(0);
+  }
+
+  /* Force nav text to always show in mobile */
+  .sidebar-nav li .nav-text {
+    display: block !important;
+    margin-left: 12px;
+    opacity: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    clip: auto !important;
+  }
+
+  /* Ensure nav items show both icon and text */
+  .sidebar-nav li {
+    justify-content: flex-start;
+    padding: 14px 20px;
+  }
+
+  .nav-icon {
+    margin-right: 12px;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  /* Hide desktop header in mobile */
+  .sidebar-header {
+    display: none;
+  }
+
+  /* Make sure logout text shows */
+  .logout-btn span:not(.logout-icon) {
+    display: inline !important;
+  }
+}
+
+/* Desktop styles - ensure they remain unchanged */
+/* Update the mobile sidebar styles */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px; /* Increased from 250px for better spacing */
+    padding: 16px 0; /* Add some padding */
+  }
+
+  .sidebar-nav li {
+    padding: 14px 24px; /* Increased padding for better touch targets */
+    margin: 0 8px; /* Add some margin */
+    border-radius: 8px; /* Rounded corners */
+  }
+
+  .nav-icon {
+    min-width: 24px; /* Ensure consistent icon spacing */
+    text-align: center; /* Center icons */
+    margin-right: 16px; /* Increased spacing between icon and text */
+  }
+
+  .nav-text {
+    font-size: 15px; /* Slightly larger text */
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+
+ .sidebar-footer {
+    padding: 16px;
+  }
+  
+  .logout-btn {
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .logout-icon {
+    margin-right: 0;
+  }
+}
+
+/* Ensure the mobile menu stays on top of other content */
+.sidebar.mobile-active {
+  z-index: 1001; /* Higher than mobile header */
+}
+
+/* Add smooth transition for mobile menu */
+.sidebar {
+  transition: transform 0.3s ease-out;
+}
+
+@media (max-width: 1024px) {
+  /* Adjust header height */
+  .top-header {
+    height: 64px;
+  }
+
+  /* Make content area more compact */
+  .content-area {
+    min-height: calc(100vh - 110px);
+  }
+
+  /* Adjust user avatar size */
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+  }
+  .user-info{
+    display:none
+  }
+
+  /* Make notification bell more compact */
+  .notification-bell {
+    padding: 6px;
+  }
+}
+
+/* Ensure the mobile menu stays on top of other content */
+.sidebar.mobile-active {
+  z-index: 1001;
+}
+
+/* Add smooth transition for mobile menu */
+.sidebar {
+  transition: transform 0.3s ease-out;
+}

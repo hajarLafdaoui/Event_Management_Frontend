@@ -5,11 +5,15 @@ import ForgotPassword from './components/Auth/ForgotPassword';
 import ResetPassword from './components/Auth/ResetPassword';
 import EmailVerification from './components/Auth/EmailVerification';
 import Dashboard from './components/Dashboard/Dashboard';
+
 import PrivateRoute from './PrivateRoute';
 import ResendVerification from './components/Auth/ResendVerification';
 import UserDetails from './components/Auth/UserDetails';
 import UpdatePassword from './components/Auth/UpdatePassword';
 import UpdateProfile from './components/Auth/UpdateProfile';
+import Admin_Dashboard from './components/Admin/Admin_Dashboard';
+import Vendor_Dashboard from './components/Vendor/Vendor_Dashboard';
+import Client_Dashboard from './components/Client/Client_Dashboard';
 
 function App() {
   return (
@@ -32,6 +36,9 @@ function App() {
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin/dashboard" element={<Admin_Dashboard />} />
+        <Route path="/vendor/dashboard" element={<Vendor_Dashboard />} />
+        <Route path="client/dashboard" element={<Client_Dashboard />} />
           <Route path="/update-password" element={<UpdatePassword />} />
           <Route path="/user-details" element={<UserDetails />} />          {/* Add other protected routes here */}
         </Route>

@@ -4,4 +4,9 @@ npm install react-router-dom
 //29/04
 # Install the correct packages with legacy peer deps flag
 npm install @react-oauth/google @greatsumini/react-facebook-login --legacy-peer-deps
-d> npm install @react-oauth/google react-facebook-login --legacy-peer-deps
+ npm install @react-oauth/google react-facebook-login --legacy-peer-deps
+
+
+ 30/5
+ npm install antd @ant-design/icons --legacy-peer-deps
+ npm install @ant-design/icons
