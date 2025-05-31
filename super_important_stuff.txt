@@ -10,3 +10,6 @@ npm install @react-oauth/google @greatsumini/react-facebook-login --legacy-peer-
  30/5
  npm install antd @ant-design/icons --legacy-peer-deps
  npm install @ant-design/icons
+
+31/5
+npm install aos
