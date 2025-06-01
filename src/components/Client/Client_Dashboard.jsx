@@ -14,6 +14,7 @@ import BudgetPayement from './BudgetPayement';
 import Communication from './Communication';
 import EventDocument from './EventDocument';
 import EventGallary from './EventGallary';
+import { EventProvider } from '../../context/EventContext';
 import {
     FiHome,FiUsers,FiCheckSquare ,FiBriefcase ,FiCalendar,
     FiSettings,FiLogOut,FiDollarSign ,FiSearch,
@@ -122,6 +123,7 @@ const Client_Dashboard = () => {
     };
 
     return (
+        <EventProvider>
         <div className="admin-dashboard">
             {/* Mobile Header */}
             {isMobile && (
@@ -255,6 +257,7 @@ const Client_Dashboard = () => {
                 </div>
             </main>
         </div>
+    </EventProvider>
     );
 }
 

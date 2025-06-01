@@ -1,0 +1,166 @@
+/* EventContent.css */
+
+.event-content {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.event-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.event-filters select,
+.event-filters input[type="date"] {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f5f7fa;
+  color: #2d3748;
+  transition: border 0.2s ease;
+}
+
+.event-filters select:focus,
+.event-filters input[type="date"]:focus {
+  outline: none;
+  border-color: #714897;
+}
+
+.event-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Optional: distribute space evenly */
+  background-color: #f5f7fa;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border-left: 4px solid #714897;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer; /* Optional: show it's interactive */
+}
+
+.event-card:hover {
+  background-color: #714897;
+  color: #ffffff;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #2A0637 ; /* Change border color on hover */
+}
+
+.event-card:hover h3,
+.event-card:hover p {
+  color: #ffffff;
+}
+
+.event-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2A0637;
+  margin-bottom: 6px;
+  margin-right: 12px; /* space between elements if needed */
+}
+
+.event-card p {
+  margin-bottom: 4px;
+  color: #2d3748;
+  font-size: 14px;
+}
+.delete-btn {
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+.create-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+.create-button-container .create-btn {
+  background-color: #f5f7fa;
+  color: #2A0637;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  padding: 0.5em 1em;
+   border-radius: 8px;
+  cursor: pointer;
+}
+.create-btn span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  color: #2A0637; /* Optional: ensures "+" matches text color */
+}
+
+.create-btn:hover {
+  background-color: #5d3c7a; /* darker shade */
+  color: #ffffff;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.delete-btn:hover {
+  background-color: #d17c73;
+  transition: background-color 0.3s ease;
+}
+
+
+@media (max-width: 600px) {
+  .event-filters {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .event-filters select,
+  .event-filters input[type="date"] {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .event-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .event-card h3 {
+    font-size: 15px;
+    margin-right: 0;
+    margin-bottom: 6px;
+  }
+
+  .event-card p {
+    font-size: 13px;
+  }
+}
+/* Responsive for Create Button */
+@media (max-width: 600px) {
+  .create-button-container {
+    justify-content: center;
+    margin-top: 16px;
+    margin-bottom: 7px;
+  }
+
+  .create-button-container .create-btn {
+    width: 100%;
+    font-size: 15px;
+    padding: 0.6em;
+
+    text-align: center;
+  }
+
+  .create-btn span {
+    margin-right: 0.4rem;
+  }
+}
