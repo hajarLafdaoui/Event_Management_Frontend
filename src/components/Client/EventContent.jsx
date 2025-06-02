@@ -142,11 +142,11 @@ const EventContent = () => {
   return (
     <div className="event-content">
       <h2 data-aos="fade-right">My Events</h2>
-      <div className="create-button-container" data-aos="fade-right">
-        <button onClick={handleCreateClick} className="create-btn">+ Create New Event</button>
-      </div>
       {!showCreateForm && (
         <>
+          <div className="create-button-container" data-aos="fade-right">
+            <button onClick={handleCreateClick} className="create-btn">+ Create New Event</button>
+          </div>
           <div className="event-filters" data-aos="fade-right">
             <select value={eventTypeFilter} onChange={(e) => setEventTypeFilter(e.target.value)}>
               <option value="">All Types</option>
@@ -191,6 +191,7 @@ const EventContent = () => {
           <div>
             <label>Event Name*</label>
             <input
+              type='text'
               name="event_name"
               placeholder="Event Name"
               value={formData.event_name}
@@ -227,6 +228,7 @@ const EventContent = () => {
           <div>
             <label>Location*</label>
             <input
+              type="text"
               name="location"
               placeholder="Location"
               value={formData.location}
@@ -253,7 +255,7 @@ const EventContent = () => {
           </div>
 
           {editingEventId && (
-            <>
+            <div className="update-inputs-grid">
               <div>
                 <label>Event Description</label>
                 <textarea
@@ -363,7 +365,8 @@ const EventContent = () => {
                 </select>
                 {formError?.status && <small className="error">{formError.status}</small>}
               </div>
-            </>
+            </div>
+
           )}
 
           <button type="submit">{editingEventId ? 'Update Event' : 'Create Event'}</button>

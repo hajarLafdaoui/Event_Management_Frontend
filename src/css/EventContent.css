@@ -114,6 +114,120 @@
   transition: background-color 0.3s ease;
 }
 
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.event-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #4a4a4a;
+  font-size: 14px;
+}
+
+.event-form input[type="text"],
+.event-form input[type="number"],
+.event-form input[type="datetime-local"],
+.event-form select,
+.event-form textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9fafb;
+  color: #2d3748;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  resize: vertical;
+  min-height: 36px;
+}
+
+.event-form textarea {
+  min-height: 80px;
+}
+
+.event-form input[type="text"]:focus,
+.event-form input[type="number"]:focus,
+.event-form input[type="datetime-local"]:focus,
+.event-form select:focus,
+.event-form textarea:focus {
+  border-color: #714897;
+  box-shadow: 0 0 6px rgba(113, 72, 151, 0.4);
+  outline: none;
+}
+
+.event-form small.error {
+  color: #e53e3e;
+  margin-top: 4px;
+  font-size: 13px;
+  font-style: italic;
+  display: block;
+}
+
+.event-form button[type="submit"],
+.event-form button[type="button"] {
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.event-form button[type="submit"] {
+  background-color: #714897;
+  color: white;
+  margin-right: 8px;
+}
+
+.event-form button[type="submit"]:hover {
+  background-color: #5a3570;
+}
+
+.event-form button[type="button"] {
+  background-color: #e2e8f0;
+  color: #4a4a4a;
+}
+
+.event-form button[type="button"]:hover {
+  background-color: #cbd5e1;
+}
+.event-form .update-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 1rem;
+}
+
+/* Inputs and textareas inside the grid get full width */
+.event-form .update-inputs-grid input,
+.event-form .update-inputs-grid textarea,
+.event-form .update-inputs-grid select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f5f7fa;
+  color: #2d3748;
+  transition: border 0.2s ease;
+}
+
+.event-form .update-inputs-grid input:focus,
+.event-form .update-inputs-grid textarea:focus,
+.event-form .update-inputs-grid select:focus {
+  border-color: #7151a2;
+  outline: none;
+}
+/* Responsive Styles */
+
 
 @media (max-width: 600px) {
   .event-filters {
@@ -143,7 +257,13 @@
   .event-card p {
     font-size: 13px;
   }
+
+  /* New addition: Adjust main content margin for sidebar */
+  .main {
+    margin-left: 0 !important; /* remove left margin for full width */
+  }
 }
+
 /* Responsive for Create Button */
 @media (max-width: 600px) {
   .create-button-container {
@@ -156,11 +276,43 @@
     width: 100%;
     font-size: 15px;
     padding: 0.6em;
-
     text-align: center;
   }
 
   .create-btn span {
     margin-right: 0.4rem;
+  }
+}
+
+/* Responsive for Event Form */
+@media (max-width: 600px) {
+  .event-content {
+    padding: 15px 10px;
+  }
+
+  .event-form {
+    max-width: 100%;
+    gap: 0.75rem;
+  }
+
+  .event-form input[type="text"],
+  .event-form input[type="number"],
+  .event-form input[type="datetime-local"],
+  .event-form select,
+  .event-form textarea {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .event-form button[type="submit"],
+  .event-form button[type="button"] {
+    width: 100%;
+    margin: 0 0 10px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-form .update-inputs-grid {
+    grid-template-columns: 1fr;
   }
 }
