@@ -13,3 +13,9 @@ npm install @react-oauth/google @greatsumini/react-facebook-login --legacy-peer-
 
 31/5
 npm install aos
+
+
+02/6
+npm install lucide-react --legacy-peer-deps
+npm install react-circular-progressbar --legacy-peer-deps
+

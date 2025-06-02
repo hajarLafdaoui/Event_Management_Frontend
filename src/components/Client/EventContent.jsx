@@ -4,6 +4,9 @@ import 'aos/dist/aos.css';
 import { useEvents } from '../../context/EventContext';
 import '../../css/EventContent.css';
 import {FiTrash,FiRefreshCw } from 'react-icons/fi';
+import {
+  Plus,
+} from 'lucide-react';
 const EventContent = () => {
   const { events, eventTypes, loading, error, createEvent, updateEvent,deleteEvent } = useEvents();
 
@@ -176,7 +179,7 @@ const resetDateFilters = () => {
       {!showCreateForm && (
         <>
           <div className="create-button-container" data-aos="fade-right">
-            <button onClick={handleCreateClick} className="create-btn">+ Create New Event</button>
+            <button onClick={handleCreateClick} className="create-btn"><Plus size={16} />Create New Event</button>
           </div>
           <div className="event-filters" data-aos="fade-right">
             <select value={eventTypeFilter} onChange={(e) => setEventTypeFilter(e.target.value)}>
