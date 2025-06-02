@@ -3,7 +3,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEvents } from '../../context/EventContext';
 import '../../css/EventContent.css';
-import {FiTrash} from 'react-icons/fi';
+import {FiTrash,FiRefreshCw } from 'react-icons/fi';
 const EventContent = () => {
   const { events, eventTypes, loading, error, createEvent, updateEvent,deleteEvent } = useEvents();
 
@@ -13,7 +13,8 @@ const EventContent = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingEventId, setEditingEventId] = useState(null);
   const [formError, setFormError] = useState(null);
-
+ const [viewingEvent, setViewingEvent] = useState(null);
+ const [closing, setClosing] = useState(false);
   const initialFormData = {
     event_type_id: '',
     event_name: '',
@@ -45,6 +46,20 @@ const EventContent = () => {
     setFormData(initialFormData);
     setFormError(null);
   };
+const handleViewClick = (event) => {
+  console.log('Clicked event:', event)
+  setViewingEvent(event);
+  setShowCreateForm(false);
+  setEditingEventId(null);
+  setFormError(null);
+};
+const handleClose = () => {
+  setClosing(true);
+  setTimeout(() => {
+    setViewingEvent(null);
+    setClosing(false);
+  }, 400); // Duration matches the CSS animation
+};
 
   const handleEditClick = (event) => {
     setShowCreateForm(true);
@@ -132,12 +147,28 @@ const EventContent = () => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   const filteredEvents = events.filter((event) => {
-    const matchesType = eventTypeFilter ? event.event_type?.type_name === eventTypeFilter : true;
-    const startDate = startDateFilter ? new Date(startDateFilter) : null;
-    const endDate = endDateFilter ? new Date(endDateFilter) : null;
-    const eventDate = new Date(event.start_datetime);
-    return matchesType && (!startDate || eventDate >= startDate) && (!endDate || eventDate <= endDate);
-  });
+  const matchesType = eventTypeFilter ? event.event_type?.type_name === eventTypeFilter : true;
+
+  const startDate = startDateFilter ? new Date(startDateFilter) : null;
+  const endDate = endDateFilter ? new Date(endDateFilter) : null;
+
+  const eventStart = new Date(event.start_datetime);
+  const eventEnd = new Date(event.end_datetime);
+
+  // Check for date overlap if both filters set
+  const matchesDateRange =
+    (!startDate && !endDate) || // no filter, show all
+    (startDate && endDate && eventStart <= endDate && eventEnd >= startDate) ||
+    (startDate && !endDate && eventEnd >= startDate) ||
+    (!startDate && endDate && eventStart <= endDate);
+
+  return matchesType && matchesDateRange;
+});
+
+const resetDateFilters = () => {
+  setStartDateFilter('');
+  setEndDateFilter('');
+};
 
   return (
     <div className="event-content">
@@ -156,31 +187,73 @@ const EventContent = () => {
             </select>
             <input type="date" value={startDateFilter} onChange={(e) => setStartDateFilter(e.target.value)} />
             <input type="date" value={endDateFilter} onChange={(e) => setEndDateFilter(e.target.value)} />
-          </div>
+            <FiRefreshCw
+              size={20}
+              className="refresh-icon"
+              onClick={resetDateFilters}
+              title="Reset Dates"
+            />
 
-          <div className="event-list" data-aos="fade-up">
-            {filteredEvents.length === 0 && <p>No events found.</p>}
-            {filteredEvents.map(event => (
-              <div key={event.event_id} className="event-card" onClick={() => handleEditClick(event)}>
-                <h3>{event.event_name}</h3>
-                <p>Type: {event.event_type?.type_name}</p>
-                <p>{new Date(event.start_datetime).toLocaleString()} - {new Date(event.end_datetime).toLocaleString()}</p>
-                <p>Status: {event.status}</p>
-                <button
-                  type="button"
-                  className="delete-btn"
-                  onClick={(e) => {
-                    e.stopPropagation(); // prevent triggering edit
-                    handleDelete(event.event_id);
-                  }}
-                >
-                  <FiTrash size={18} color="#714897" />
-                </button>
+          </div>
+          <div className="event-container">
+              <div className="event-list" data-aos="fade-up">
+                {filteredEvents.length === 0 && <p>No events found.</p>}
+                {filteredEvents.map(event => (
+                  <React.Fragment key={event.event_id}>
+                    <div className="event-card" onClick={() => handleViewClick(event)}>
+                      <h3>{event.event_name}</h3>
+                      <p>Type: {event.event_type?.type_name}</p>
+                      <p>
+                        {new Date(event.start_datetime).toLocaleString()} -{' '}
+                        {new Date(event.end_datetime).toLocaleString()}
+                      </p>
+                      <p>Status: {event.status}</p>
+                      <button
+                        type="button"
+                        className="delete-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(event.event_id);
+                        }}
+                      >
+                        <FiTrash size={18} color="#714897" />
+                      </button>
+                    </div>
+
+                    {viewingEvent?.event_id === event.event_id && (
+                      <div className={`event-detail ${closing ? 'closing' : ''}`}
+                          data-aos={!closing ? "fade-down" : null} // disable AOS on close
+                      >
+                        <h3>{viewingEvent.event_name}</h3>
+                        <p><strong>Type:</strong> {viewingEvent.event_type?.type_name}</p>
+                        <p><strong>Description:</strong> {viewingEvent.event_description || 'N/A'}</p>
+                        <p><strong>Start:</strong> {new Date(viewingEvent.start_datetime).toLocaleString()}</p>
+                        <p><strong>End:</strong> {new Date(viewingEvent.end_datetime).toLocaleString()}</p>
+                        <p><strong>Location:</strong> {viewingEvent.location}</p>
+                        <p><strong>Venue Name:</strong> {viewingEvent.venue_name || 'N/A'}</p>
+                        <p><strong>Address:</strong> {viewingEvent.address || 'N/A'}</p>
+                        <p><strong>City:</strong> {viewingEvent.city || 'N/A'}</p>
+                        <p><strong>State:</strong> {viewingEvent.state || 'N/A'}</p>
+                        <p><strong>Country:</strong> {viewingEvent.country || 'N/A'}</p>
+                        <p><strong>Postal Code:</strong> {viewingEvent.postal_code || 'N/A'}</p>
+                        <p><strong>Budget:</strong> {viewingEvent.budget || 'N/A'}</p>
+                        <p><strong>Theme:</strong> {viewingEvent.theme || 'N/A'}</p>
+                        <p><strong>Notes:</strong> {viewingEvent.notes || 'N/A'}</p>
+                        <p><strong>Status:</strong> {viewingEvent.status}</p>
+                        <button onClick={() => {
+                          handleEditClick(viewingEvent);
+                          setViewingEvent(null);
+                        }}>Edit</button>
+                        <button onClick={handleClose} className="close-btn">Close</button>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
-            ))}
           </div>
         </>
       )}
+
 
       {showCreateForm && (
         <form onSubmit={handleSubmit} className="event-form" data-aos="fade-up" noValidate>
