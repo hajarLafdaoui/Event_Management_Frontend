@@ -98,7 +98,7 @@ const Client_Dashboard = () => {
     const renderContent = () => {
         switch (selectedMenu) {
             case 'dashboard':
-                return <DashboardContent />;
+                return <DashboardContent  onSelectMenu={handleMenuClick} />;
             case 'Events':
                 return  <EventContent />;
             case 'Tasks':

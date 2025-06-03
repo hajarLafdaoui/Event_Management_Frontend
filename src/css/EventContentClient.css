@@ -57,7 +57,7 @@
   margin-bottom: 12px;
   border-radius: 12px;
   border-left: 4px solid #714897;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer; /* Optional: show it's interactive */
 }
 

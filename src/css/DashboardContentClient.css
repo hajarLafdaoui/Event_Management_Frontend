@@ -1,0 +1,394 @@
+.dashboard-container {
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  color: #111;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #714897; /* Use purple for main heading */
+}
+
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn.add {
+  background-color: #714897; /* replaced green with purple */
+  color: white;
+}
+
+.btn.add:hover {
+  background-color: #5a3773; /* slightly darker purple on hover */
+}
+
+.btn.import {
+  background-color: #E0E0E0;
+  color: #714897; /* purple text */
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background: #f9f9f9;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(113, 72, 151, 0.15); /* subtle purple shadow */
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card h3 {
+  margin-bottom: 0.5rem;
+  color: #714897; /* purple for card titles */
+}
+.card:hover {
+  background-color: #714897;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #2A0637;
+  transition: all;
+}
+.card:hover h3,
+.card:hover .number,
+.card:hover .growth,
+.card:hover .status,
+.card:hover p,
+.card:hover span,
+.card:hover strong {
+  color: #ffffff;
+}
+.card:hover .goto-icon{
+    background-color: #E0E0E0; /* Darker purple on hover */
+    color: #714897; /* purple text */
+}
+
+.number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #714897;
+}
+
+.growth, .status {
+  font-size: 0.875rem;
+  color: #714897; /* purple text */
+}
+
+.lower-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.reminder .btn.start-meeting {
+  background-color: #714897; /* purple */
+  color: white;
+  margin-top: 0.5rem;
+}
+
+.reminder .btn.start-meeting:hover {
+  background-color: #5a3773;
+}
+
+.time-display {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  color: #714897;
+}
+
+.timer-controls button {
+  margin-right: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #714897;
+  transition: color 0.3s ease;
+}
+
+.timer-controls button:hover {
+  color: #5a3773;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+
+}
+.goto-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #714897; /* Purple background */
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.goto-icon:hover {
+  background-color: #5a3773; /* Darker purple on hover */
+}
+
+.plus-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white; /* white round icon background */
+  color: #714897; /* purple icon */
+  border-radius: 50%;
+  padding: 4px;
+}
+
+.goto-label {
+  color: white;
+  font-size: 0.9rem;
+}
+
+.project-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.project-list li {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(113, 72, 151, 0.05);
+}
+
+.project-list li strong {
+  color: #714897;
+  font-size: 1rem;
+}
+
+.project-list li span {
+  font-size: 0.875rem;
+  color: #555;
+}
+
+
+
+.card:hover .project-list li {
+  background-color: #8a5db1;
+  border-color: #8a5db1;
+}
+
+/* Base padding and font adjustments for small devices */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .number {
+    font-size: 1.5rem;
+  }
+
+  .time-display {
+    font-size: 1.25rem;
+  }
+
+  .goto-icon {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .project-list li {
+    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .plus-icon {
+    padding: 3px;
+  }
+}
+
+/* Tighter grid layout for tablets */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .lower-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* Stack buttons vertically on very small screens */
+@media (max-width: 500px) {
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .goto-icon {
+    width: 100%;
+    justify-content: center;
+  }
+}
+/* General improvements for medium screens */
+@media (max-width: 1024px) {
+  .card {
+    padding: 0.8rem;
+    border-radius: 0.75rem;
+  }
+
+  .card h3 {
+    font-size: 1rem;
+  }
+
+  .number {
+    font-size: 1.5rem;
+  }
+
+  .growth,
+  .status {
+    font-size: 0.8rem;
+  }
+}
+
+/* Optimizations for tablets and small laptops */
+@media (max-width: 768px) {
+  .card {
+    padding: 0.75rem;
+  }
+
+  .card h3 {
+    font-size: 0.95rem;
+  }
+
+  .number {
+    font-size: 1.3rem;
+  }
+
+  .goto-icon {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* Extra support for mobile and very small screens */
+@media (max-width: 480px) {
+  .card {
+    padding: 0.6rem;
+    box-shadow: none;
+    border-left: 4px solid #ccc;
+  }
+
+  .card h3 {
+    font-size: 0.9rem;
+  }
+
+  .number {
+    font-size: 1.1rem;
+  }
+
+  .growth,
+  .status {
+    font-size: 0.75rem;
+  }
+
+  .goto-icon {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .card-header {
+    padding: 0.5rem;
+  }
+}
+
+/* Disable hover effects on touch devices to avoid usability issues */
+@media (hover: none) {
+  .card:hover {
+  background-color: #714897;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #2A0637;
+  transition: all;
+  }
+
+  .card:hover h3,
+  .card:hover .number,
+  .card:hover .growth,
+  .card:hover .status,
+  .card:hover p,
+  .card:hover span,
+  .card:hover strong {
+    color: #714897;
+  }
+
+  .card:hover .goto-icon {
+    background-color: #714897;
+    color: #fff;
+  }
+}

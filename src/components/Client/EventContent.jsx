@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEvents } from '../../context/EventContext';
-import '../../css/EventContent.css';
+import '../../css/EventContentClient.css';
 import {FiTrash,FiRefreshCw } from 'react-icons/fi';
-import {
-  Plus,
-} from 'lucide-react';
+import {Plus} from 'lucide-react';
 const EventContent = () => {
   const { events, eventTypes, loading, error, createEvent, updateEvent,deleteEvent } = useEvents();
 
