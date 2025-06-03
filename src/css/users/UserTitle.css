@@ -1,0 +1,18 @@
+.user-icon {
+    width: 22px;
+}
+
+.search-filter-content-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #000;
+}
+
+.user-num {
+    font-size: 14px;
+    font-weight: 500;
+    color: #eee;
+    border-radius: 16px;
+    padding: 0px 4px;
+    background-color: #8b5cf6;
+}

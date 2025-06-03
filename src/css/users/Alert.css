@@ -1,0 +1,152 @@
+/* Alert.css - Enhanced Perfect Style */
+.alert-container {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  width: 100%;
+  max-width: 26rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.alert-content {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  border-left-width: 4px;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 
+              0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.alert-icon-container {
+  flex-shrink: 0;
+  margin-right: 0.875rem;
+  padding-top: 0.125rem;
+}
+
+.alert-message {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+.alert-close-button {
+  margin-left: 0.875rem;
+  margin-top: -0.25rem;
+  padding: 0.375rem;
+  border-radius: 50%;
+  color: #9ca3af;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-close-button:hover {
+  color: #6b7280;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.alert-close-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Alert types with enhanced colors */
+.alert-success {
+  background-color: rgba(236, 253, 245, 0.95);
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.alert-success .alert-icon {
+  color: #059669;
+}
+
+.alert-error {
+  background-color: rgba(254, 226, 226, 0.95);
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+.alert-error .alert-icon {
+  color: #dc2626;
+}
+
+.alert-warning {
+  background-color: rgba(254, 243, 199, 0.95);
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.alert-warning .alert-icon {
+  color: #d97706;
+}
+
+.alert-info {
+  background-color: rgba(219, 234, 254, 0.95);
+  border-color: #3b82f6;
+  color: #1e40af;
+}
+
+.alert-info .alert-icon {
+  color: #2563eb;
+}
+
+/* Enhanced Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+.alert-slide-in {
+  animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.alert-fade-out {
+  animation: fadeOut 0.3s ease-in forwards;
+}
+
+/* Progress bar for auto-dismiss */
+.alert-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: currentColor;
+  opacity: 0.2;
+  width: 100%;
+  transform-origin: left;
+  animation: progressBar var(--duration) linear forwards;
+}
+
+@keyframes progressBar {
+  from { transform: scaleX(1) }
+  to { transform: scaleX(0) }
+}
