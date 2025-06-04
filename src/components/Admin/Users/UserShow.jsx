@@ -1,124 +1,171 @@
-import React from 'react';
+import React, { useState } from 'react';
+import UserUpdate from './UserUpdate'; // Import the UserUpdate component
+import '../../../css/users/userDetails.css';
 
 const UserShow = ({ user, onBack }) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleUpdateClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleUpdateComplete = () => {
+    setIsEditing(false);
+    // You might want to refresh user data here if needed
+  };
+
+  // If in editing mode, show the UserUpdate component
+  if (isEditing) {
+    return <UserUpdate user={user} onBack={handleUpdateComplete} />;
+  }
+
+  // Otherwise, show the normal user details view
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="flex justify-between items-start mb-6">
-        <h2 className="text-xl font-bold">User Details</h2>
-        <button 
-          onClick={onBack}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors"
-        >
+    <div className="user-show-container">
+      <div className="user-show-header">
+        <h2 className="user-show-title">User Details</h2>
+        <button onClick={onBack} className="user-show-back-btn user-show-action-btn user-show-action-update">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+          </svg>
           Back to List
         </button>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="user-show-content">
         {/* Left Column - Profile Image */}
-        <div className="flex flex-col items-center md:items-start">
+        <div className="user-show-profile-col">
           {user.profile_picture ? (
-            <div className="mb-4">
+            <div className="user-show-profile-img-container">
               <img
                 src={user.profile_picture}
                 alt={`${user.first_name} ${user.last_name}`}
-                className="w-32 h-32 rounded-full object-cover border border-gray-200"
+                className="user-show-profile-img"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = '';
                   e.target.className = 'hidden';
                 }}
               />
-              <div className="mt-2 text-center">
-                <a 
-                  href={user.profile_picture} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline text-sm"
-                >
-                  View Full Image
-                </a>
-              </div>
             </div>
           ) : (
-            <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300 mb-4">
-              <span className="text-2xl font-medium text-gray-600">
+            <div className="user-show-profile-initials">
+              <span className="user-show-profile-initials-text">
                 {user.first_name?.charAt(0)}{user.last_name?.charAt(0)}
               </span>
             </div>
           )}
-          
-          <div className="text-center md:text-left">
-            <h3 className="text-xl font-bold">{user.first_name} {user.last_name}</h3>
-            <p className="text-gray-600 capitalize">{user.role}</p>
-            <p className={`inline-block mt-2 px-3 py-1 rounded-full text-xs ${
-              user.deleted_at ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-            }`}>
-              {user.deleted_at ? 'Inactive' : 'Active'}
-            </p>
+          <div className="user-show-actions">
+            <span className="user-show-detail-value">{user.email}</span>
+            <p className="user-show-profile-role">{user.role}</p>
+          </div>
+
+          <div className="user-show-detail-item">
+            <span className="user-show-detail-label">Last Login:</span>
+            <span className="user-show-detail-value">
+              {user.last_login_at ? new Date(user.last_login_at).toLocaleString() : 'Never'}
+            </span>
+          </div>
+
+          {/* Action Links */}
+          <div className="user-show-actions">
+            <button 
+              className="user-show-action-btn user-show-action-update"
+              onClick={handleUpdateClick}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              </svg>
+              Update Profile
+            </button>
+       
           </div>
         </div>
 
         {/* Right Column - User Details */}
-        <div className="flex-1 space-y-4">
-          {/* Basic Information */}
-          <div className="space-y-2">
-            <h3 className="font-semibold text-lg border-b pb-2">Basic Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <p><span className="font-medium">ID:</span> {user.id}</p>
-              <p><span className="font-medium">Email:</span> {user.email}</p>
-              <p><span className="font-medium">Email Verified:</span> 
-                <span className={user.is_email_verified ? 'text-green-500' : 'text-red-500'}>
-                  {user.is_email_verified ? ' Yes' : ' No'}
+        <div className="user-show-details-col">
+          {/* Personal Information */}
+          <div>
+            <h3 className="user-show-section-title">Personal Information</h3>
+            <div className="user-show-details-grid">
+              <div className="user-show-detail-item">
+                <span className="user-show-detail-label">First Name:</span>
+                <span className="user-show-detail-value">{user.first_name}</span>
+              </div>
+              <div className="user-show-detail-item">
+                <span className="user-show-detail-label">Last Name:</span>
+                <span className="user-show-detail-value">{user.last_name}</span>
+              </div>
+            </div>
+
+            <div className="user-show-details-grid">
+              <div className="user-show-detail-item">
+                <span className="user-show-detail-label">Email Verified:</span>
+                <span className={`user-show-email-verified ${user.is_email_verified ? 'user-show-email-verified-yes' : 'user-show-email-verified-no'}`}>
+                  {user.is_email_verified ? 'Yes' : 'No'}
                 </span>
-              </p>
-              <p><span className="font-medium">Last Login:</span> 
-                {user.last_login_at ? new Date(user.last_login_at).toLocaleString() : 'Never'}
-              </p>
+              </div>
+              <div className="user-show-detail-item">
+                <span className="user-show-detail-label">Phone:</span>
+                <span className="user-show-detail-value">{user.phone || 'N/A'}</span>
+              </div>
+            </div>
+            <div className="user-show-details-grid">
+              <div className="user-show-detail-item">
+                <span className="user-show-detail-label">Status:</span>
+                <span className={`user-show-status ${user.deleted_at ? 'user-show-status-inactive' : 'user-show-status-active'}`}>
+                  {user.deleted_at ? 'Inactive' : 'Active'}
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Contact Information */}
-          <div className="space-y-2">
-            <h3 className="font-semibold text-lg border-b pb-2">Contact Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <p><span className="font-medium">Phone:</span> {user.phone || 'N/A'}</p>
-              <p><span className="font-medium">Gender:</span> {user.gender ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : 'N/A'}</p>
-              <p className="md:col-span-2"><span className="font-medium">Address:</span> {user.address || 'N/A'}</p>
-              <p><span className="font-medium">City:</span> {user.city || 'N/A'}</p>
-              <p><span className="font-medium">Country:</span> {user.country || 'N/A'}</p>
+          <div className="user-show-details-grid">
+            <div className="user-show-detail-item">
+              <span className="user-show-detail-label">Address:</span>
+              <span className="user-show-detail-value">{user.address || 'N/A'}</span>
+            </div>
+            <div className="user-show-detail-item">
+              <span className="user-show-detail-label">City:</span>
+              <span className="user-show-detail-value">{user.city || 'N/A'}</span>
+            </div>
+            <div className="user-show-detail-item">
+              <span className="user-show-detail-label">Country:</span>
+              <span className="user-show-detail-value">{user.country || 'N/A'}</span>
             </div>
           </div>
 
           {/* Social Links */}
-          <div className="space-y-2">
-            <h3 className="font-semibold text-lg border-b pb-2">Social Links</h3>
-            <div className="space-y-1">
+          <div>
+            <h3 className="user-show-section-title">Social Links</h3>
+            <div className="user-show-social-links">
               {user.facebook_url && (
-                <p>
-                  <span className="font-medium">Facebook:</span>{' '}
-                  <a href={user.facebook_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">
+                <div className="user-show-detail-item">
+                  <span className="user-show-detail-label">Facebook:</span>
+                  <a href={user.facebook_url} target="_blank" rel="noopener noreferrer" className="user-show-social-link">
                     {user.facebook_url}
                   </a>
-                </p>
+                </div>
               )}
               {user.instagram_url && (
-                <p>
-                  <span className="font-medium">Instagram:</span>{' '}
-                  <a href={user.instagram_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">
+                <div className="user-show-detail-item">
+                  <span className="user-show-detail-label">Instagram:</span>
+                  <a href={user.instagram_url} target="_blank" rel="noopener noreferrer" className="user-show-social-link">
                     {user.instagram_url}
                   </a>
-                </p>
+                </div>
               )}
               {user.tiktok_url && (
-                <p>
-                  <span className="font-medium">TikTok:</span>{' '}
-                  <a href={user.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">
+                <div className="user-show-detail-item">
+                  <span className="user-show-detail-label">TikTok:</span>
+                  <a href={user.tiktok_url} target="_blank" rel="noopener noreferrer" className="user-show-social-link">
                     {user.tiktok_url}
                   </a>
-                </p>
+                </div>
               )}
               {!user.facebook_url && !user.instagram_url && !user.tiktok_url && (
-                <p className="text-gray-500">No social links available</p>
+                <p className="user-show-no-social">No social links available</p>
               )}
             </div>
           </div>
