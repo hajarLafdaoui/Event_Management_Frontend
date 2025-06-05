@@ -319,10 +319,22 @@ const UserList = () => {
     setViewMode('update');
   };
 
-  const handleBackToList = () => {
-    setViewMode('table');
-    setSelectedUser(null);
-  };
+// In UserList component
+const handleBackToList = (shouldRefresh = false) => {
+  setViewMode('table');
+  setSelectedUser(null);
+  if (shouldRefresh) {
+    fetchUsers(); // Explicitly refresh the data
+  }
+};
+
+// Update how you pass the onBack prop to UserUpdate
+{viewMode === 'update' && (
+  <UserUpdate 
+    user={selectedUser} 
+    onBack={(shouldRefresh) => handleBackToList(shouldRefresh)} 
+  />
+)}
 
   // ... (keep all your existing handler functions)
 
