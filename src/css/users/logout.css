@@ -1,0 +1,181 @@
+.logout-confirmation-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logout-confirmation-dialog .dialog-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logout-confirmation-dialog h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.logout-confirmation-dialog p {
+    margin-bottom: 1.5rem;
+    color: #666;
+}
+
+.logout-confirmation-dialog .dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.logout-confirmation-dialog .confirm-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.logout-confirmation-dialog .confirm-btn:hover {
+    background-color: #c82333;
+}
+
+.logout-confirmation-dialog .cancel-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.logout-confirmation-dialog .cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Add to your AdminDashboard.css */
+.logout-confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logout-confirm-card {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.logout-confirm-header {
+    background: linear-gradient(135deg, #ff4d4d 0%, #f94444 100%);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.logout-confirm-header h3 {
+    margin: 0 0 0 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.warning-icon {
+    font-size: 1.8rem;
+    min-width: 32px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+.logout-confirm-body {
+    padding: 2rem;
+    text-align: center;
+}
+
+.logout-confirm-body p {
+    color: #555;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.confirm-btn, .cancel-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+}
+
+.confirm-btn {
+    background: linear-gradient(135deg, #ff4d4d 0%, #f94444 100%);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 6px rgba(249, 68, 68, 0.2);
+}
+
+.confirm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(249, 68, 68, 0.3);
+}
+
+.confirm-btn svg {
+    margin-right: 8px;
+}
+
+.cancel-btn {
+    background: white;
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+.cancel-btn:hover {
+    background: #f8f9fa;
+    border-color: #ccc;
+}

@@ -1,105 +1,140 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import api from '../../api/api'
+import React, { useState } from 'react';
+import { FiX, FiLock } from 'react-icons/fi';
+import api from '../../api/api';
+import Alert from '../ReusableComponent/Alert.jsx';
 
-const UpdatePassword = () => {
+const UpdatePassword = ({ onBack }) => {
   const [formData, setFormData] = useState({
     current_password: '',
     password: '',
     password_confirmation: ''
-  })
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
-  const navigate = useNavigate()
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ text: '', type: '' });
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage({ text: '', type: '' });
+    setShowAlert(false);
+
     try {
-      await api.put('/auth/password', formData)
-      setMessage('Password updated successfully!')
-      setError('')
+      await api.put('/auth/password', formData);
+      setMessage({ 
+        text: 'Password updated successfully!', 
+        type: 'success' 
+      });
+      setShowAlert(true);
       setFormData({
         current_password: '',
         password: '',
         password_confirmation: ''
-      })
+      });
+      // Optionally close the modal after success
+      setTimeout(() => onBack(), 1500);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update password')
-      setMessage('')
+      setMessage({ 
+        text: err.response?.data?.message || 'Failed to update password', 
+        type: 'error' 
+      });
+      setShowAlert(true);
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
+
+  const handleAlertClose = () => {
+    setShowAlert(false);
+  };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Update Password</h1>
-      If logged in via Google/Facebook (OAuth):
-      🔗 Show a link like: "Change password in your Google Account or Facebook Settings".
+    <div className="event-content">
+      {showAlert && (
+        <Alert
+          type={message.type}
+          message={message.text}
+          onClose={handleAlertClose}
+          autoClose={true}
+          autoCloseDuration={3000}
+        />
+      )}
 
+      <form onSubmit={handleSubmit} className="event-form" noValidate>
+        <div className="form-section">
+          <h3 className="section-title">Update Password</h3>
+          <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label">
+                <FiLock className="form-icon" /> Current Password
+              </label>
+              <input
+                type="password"
+                name="current_password"
+                value={formData.current_password}
+                onChange={handleChange}
+                className="form-input"
+                required
+              />
+            </div>
 
-      {message && <div style={{ color: 'green' }}>{message}</div>}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      
-      <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Current Password:</label>
-          <input
-            type="password"
-            name="current_password"
-            value={formData.current_password}
-            onChange={handleChange}
-            required
-            style={{ marginLeft: '10px', padding: '5px' }}
-          />
+            <div className="form-group">
+              <label className="form-label">
+                <FiLock className="form-icon" /> New Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="form-input"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">
+                <FiLock className="form-icon" /> Confirm Password
+              </label>
+              <input
+                type="password"
+                name="password_confirmation"
+                value={formData.password_confirmation}
+                onChange={handleChange}
+                className="form-input"
+                required
+              />
+            </div>
+          </div>
         </div>
-        
-        <div style={{ marginBottom: '10px' }}>
-          <label>New Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            style={{ marginLeft: '10px', padding: '5px' }}
-          />
+
+        <div className="form-actions">
+          <button
+            type="submit"
+            className="btn-primary-save"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Updating...' : 'Update Password'}
+          </button>
+          <button
+            type="button"
+            onClick={onBack}
+            className="btn-secondary-save"
+            disabled={isLoading}
+          >
+            Cancel
+          </button>
         </div>
-        
-        <div style={{ marginBottom: '10px' }}>
-          <label>Confirm Password:</label>
-          <input
-            type="password"
-            name="password_confirmation"
-            value={formData.password_confirmation}
-            onChange={handleChange}
-            required
-            style={{ marginLeft: '10px', padding: '5px' }}
-          />
-        </div>
-        
-        <button 
-          type="submit"
-          style={{ padding: '10px', cursor: 'pointer', marginRight: '10px' }}
-        >
-          Update Password
-        </button>
-        
-        <button 
-          type="button"
-          onClick={() => navigate('/dashboard')}
-          style={{ padding: '10px', cursor: 'pointer' }}
-        >
-          Cancel
-        </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default UpdatePassword
+export default UpdatePassword;
