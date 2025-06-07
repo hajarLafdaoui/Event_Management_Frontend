@@ -5,6 +5,8 @@ import { useEvents } from '../../context/EventContext';
 import '../../css/EventContentClient.css';
 import {FiTrash,FiRefreshCw } from 'react-icons/fi';
 import {Plus} from 'lucide-react';
+import ConfirmDialog from '../ReusableComponent/ConfirmDialog';
+import Alert from '../ReusableComponent/Alert';
 const EventContent = () => {
   const { events, eventTypes, loading, error, createEvent, updateEvent,deleteEvent } = useEvents();
 
@@ -16,6 +18,9 @@ const EventContent = () => {
   const [formError, setFormError] = useState(null);
  const [viewingEvent, setViewingEvent] = useState(null);
  const [closing, setClosing] = useState(false);
+ const [alert, setAlert] = useState({ message: '', type: '' });
+const [confirmDialog, setConfirmDialog] = useState({ show: false, onConfirm: null });
+
   const initialFormData = {
     event_type_id: '',
     event_name: '',
@@ -113,13 +118,19 @@ const handleClose = () => {
     return errors;
   };
   const handleDelete = async (eventId) => {
-    if (window.confirm('Are you sure you want to delete this event?')) {
+    setConfirmDialog({
+    show: true,
+    onConfirm: async () => {
+      setConfirmDialog({ show: false, onConfirm: null });
       const result = await deleteEvent(eventId);
       if (!result.success) {
-        alert('Failed to delete event: ' + result.error);
+        setAlert({ message: 'Failed to delete event: ' + result.error, type: 'error' });
+      } else {
+        setAlert({ message: 'Event deleted successfully.', type: 'success' });
       }
     }
-  };
+  });
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
@@ -134,9 +145,11 @@ const handleClose = () => {
       if (editingEventId) {
         const result = await updateEvent(editingEventId, formData);
         if (!result.success) throw new Error(result.error);
+        setAlert({ message: 'Event updated successfully.', type: 'success' });
       } else {
         const result = await createEvent(formData);
         if (!result.success) throw new Error(result.error);
+        setAlert({ message: 'Event created successfully.', type: 'success' });
       }
       setShowCreateForm(false);
     } catch (err) {
@@ -174,6 +187,20 @@ const resetDateFilters = () => {
   return (
     <div className="event-content">
       <h2 data-aos="fade-right">My Events</h2>
+          {alert.message && (
+        <Alert
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert({ message: '', type: '' })}
+        />
+      )}
+
+      <ConfirmDialog
+        show={confirmDialog.show}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={() => setConfirmDialog({ show: false, onConfirm: null })}
+        message="Are you sure you want to delete this event?"
+      />
       {!showCreateForm && (
         <>
           <div className="create-button-container" data-aos="fade-right">
