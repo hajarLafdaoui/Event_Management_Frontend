@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../../css/AdminDashboard.css';
 import '../../css/users/personalUserDetails.css';
+import '../../css/users/showLogoutConfirm.css';
+
 import '../../css/users/UpdatePassword.css';
 import E from '../.././uploads/logo/E.png';
 import Eventura from '../.././uploads/logo/Eventura.png';

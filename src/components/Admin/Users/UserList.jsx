@@ -566,7 +566,7 @@ const handleBackToList = (shouldRefresh = false) => {
                               />
                             ) : (
                               <div className="user-avatar-placeholder">
-                                <span className="avatar-initials">
+                                <span className="avatar-initialsS">
                                   {user.first_name?.charAt(0)}{user.last_name?.charAt(0)}
                                 </span>
                               </div>

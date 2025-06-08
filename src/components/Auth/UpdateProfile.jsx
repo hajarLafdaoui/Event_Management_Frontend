@@ -119,6 +119,7 @@ const handleSubmit = async (e) => {
       instagram_url: formData.instagram_url,
       tiktok_url: formData.tiktok_url,
       profile_picture: formData.profile_picture
+      
     };
 
     const response = await api.put('/auth/profile', payload);
