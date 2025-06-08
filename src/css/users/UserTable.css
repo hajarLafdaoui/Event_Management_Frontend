@@ -147,6 +147,114 @@
   margin-bottom: 15px;
   opacity: 0.5;
 }
+/* Priority Badge Styles */
+.priority-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.priority-high {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.priority-medium {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.priority-low {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+/* Status Badge Styles */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-not_started {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.status-in_progress {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-completed {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-cancelled {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+/* Due Date Cell */
+.table-cell-due {
+  padding: 15px 20px;
+  font-size: 14px;
+  color: #475569;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .priority-badge,
+  .status-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+  
+  .table-cell-due {
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 767px) {
+  .table-cell-priority,
+  .table-cell-status,
+  .table-cell-due {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+    align-items: center;
+  }
+  
+  .table-cell-priority::before,
+  .table-cell-status::before,
+  .table-cell-due::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #64748b;
+    margin-right: 10px;
+    text-transform: capitalize;
+  }
+  
+  .priority-badge,
+  .status-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+  
+  .table-cell-due {
+    font-size: 12px;
+  }
+}
+
 
 /* Actions Dropdown Styles */
 .actions-dropdown-container {
@@ -414,8 +522,28 @@
     padding: 5px 8px;
     margin: 2px;
   }
+  .table-cell-priority,
+  .table-cell-status {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .table-cell-priority::before,
+  .table-cell-status::before {
+    margin-bottom: 4px;
+    align-self: flex-start;
+  }
+  
+  .table-cell-due {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .table-cell-due::before {
+    margin-bottom: 4px;
+    align-self: flex-start;
+  }
 }
-
 /* Add this to your existing CSS to enable the mobile table layout */
 @media (max-width: 767px) {
   .users-table tbody,
