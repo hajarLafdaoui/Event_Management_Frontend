@@ -31,6 +31,14 @@
   border-radius: 4px;
   font-size: 1rem;
 }
+.form-input1{
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  font-size: 1rem;
+}
 
 .error-input {
   border-color: #e53e3e;
@@ -41,6 +49,12 @@
   font-size: 0.875rem;
   margin-top: 0.25rem;
   display: block;
+}
+.label-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between label and icon */
+  margin-bottom: 6px;
 }
 
 .form-actions{

@@ -4,7 +4,8 @@ import api from '../../api/api';
 import '../../css/users/userUpdate.css';
 import { FiSave, FiArrowLeft, FiCalendar, FiFlag } from 'react-icons/fi';
 import Alert from '../ReusableComponent/Alert';
-
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 const TaskUpdate = ({ task, onBack }) => {
   const [formData, setFormData] = useState({
     task_name: task.task_name || '',
@@ -25,7 +26,9 @@ const TaskUpdate = ({ task, onBack }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
-
+React.useEffect(() => {
+  AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+}, []);
   useEffect(() => {
     // Fetch events and templates for dropdowns
     const fetchData = async () => {
@@ -104,11 +107,11 @@ const TaskUpdate = ({ task, onBack }) => {
   return (
     <div className="user-update-container">
       <div className="div-end">
-        <div className="user-update-subheader">
+        <div className="user-update-subheader" data-aos="fade-right">
           <h3 className="user-update-title">Edit Task</h3>
           <p className="user-update-subtitle">Update the task information below</p>
         </div>
-        <div className="event-content-header user-update-header-update">
+        <div className="event-content-header user-update-header-update" data-aos="fade-left">
           <button
             onClick={() => onBack(false)}
             className="back-to-list-btn"
@@ -140,12 +143,12 @@ const TaskUpdate = ({ task, onBack }) => {
         />
       )}
 
-      <form onSubmit={handleSubmit} className="event-form" noValidate>
+      <form onSubmit={handleSubmit} className="event-form" noValidate data-aos="fade-up">
         {/* Basic Information Section */}
-        <div className="form-section">
-          <h3 className="section-title">Basic Information</h3>
+        <div className="form-section" >
+          <h3 className="section-title" >Basic Information</h3>
           <div className="form-grid">
-            <div className="form-group">
+            <div className="form-group" >
               <label className="form-label">Task Name*</label>
               <input
                 type="text"
@@ -157,7 +160,7 @@ const TaskUpdate = ({ task, onBack }) => {
               {formError?.task_name && <small className="error-text">{formError.task_name}</small>}
             </div>
 
-            <div className="form-group">
+            <div className="form-group" >
               <label className="form-label">Description</label>
               <textarea
                 name="task_description"
@@ -168,7 +171,7 @@ const TaskUpdate = ({ task, onBack }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group" >
               <label className="form-label">Event</label>
               <select
                 name="event_id"
@@ -189,10 +192,10 @@ const TaskUpdate = ({ task, onBack }) => {
 
         {/* Task Details Section */}
         <div className="form-section">
-          <h3 className="section-title">Task Details</h3>
+          <h3 className="section-title" >Task Details</h3>
           <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">Status</label>
+            <div className="form-group" >
+              <label className="form-label" >Status</label>
               <select
                 name="status"
                 value={formData.status}
@@ -206,24 +209,24 @@ const TaskUpdate = ({ task, onBack }) => {
               </select>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Priority</label>
-              <div className="priority-select-container">
+           <div className="form-group" >
+              <div className="label-with-icon">
+                <label className="form-label">Priority</label>
                 <FiFlag className={`priority-icon priority-${formData.priority}`} />
-                <select
-                  name="priority"
-                  value={formData.priority}
-                  onChange={handleChange}
-                  className="form-input"
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </select>
               </div>
+              <select
+                name="priority"
+                value={formData.priority}
+                onChange={handleChange}
+                className="form-input"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
             </div>
 
-            <div className="form-group">
+            <div className="form-group" >
               <label className="form-label">Assigned To</label>
               <select
                 name="assigned_to"
@@ -237,21 +240,22 @@ const TaskUpdate = ({ task, onBack }) => {
               </select>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Due Date</label>
-              <div className="date-input-container">
+            <div className="form-group" >
+              <div className="label-with-icon">
+                <label className="form-label">Due Date</label>
                 <FiCalendar className="date-icon" />
-                <input
-                  type="date"
-                  name="due_date"
-                  value={formData.due_date ? formData.due_date.split('T')[0] : ''}
-                  onChange={handleChange}
-                  className="form-input"
-                />
               </div>
+              <input
+                type="date"
+                name="due_date"
+                value={formData.due_date ? formData.due_date.split('T')[0] : ''}
+                onChange={handleChange}
+                className="form-input1"
+              />
             </div>
 
-            <div className="form-group">
+
+            <div className="form-group" >
               <label className="form-label">Progress (%)</label>
               <input
                 type="number"
@@ -270,7 +274,7 @@ const TaskUpdate = ({ task, onBack }) => {
         </div>
 
         {/* Form Actions */}
-        <div className="form-actions">
+        <div className="form-actions" >
           <button
             type="submit"
             className="btn-primary-save"

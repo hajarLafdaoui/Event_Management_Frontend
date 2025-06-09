@@ -40,6 +40,18 @@
 .stat-card-new {
   border-left: 4px solid #8b5cf6;
 }
+.stat-card-draft {
+  border-left: 4px solid #0748b3;
+}
+.stat-card-planned {
+  border-left: 4px solid #8b5cf6;
+}
+.stat-card-in-progress {
+  border-left: 4px solid #6727fd;
+}
+.stat-card-cancelled {
+  border-left: 4px solid #dc2626;
+}
 
 .stat-icon-container {
   width: 50px;
@@ -61,7 +73,18 @@
   background-color: #d1fae5;
   color: #10b981;
 }
-
+.stat-icon-draft {
+  background-color: #e0f2fe;
+  color: #0748b3;
+}
+.stat-icon-in-progress {
+  background-color: #e0e7ff;
+  color: #6727fd;
+}
+.stat-icon-cancelled {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
 .stat-icon-new {
   background-color: #ede9fe;
   color: #8b5cf6;

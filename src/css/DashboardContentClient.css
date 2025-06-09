@@ -58,43 +58,27 @@
 
 .card {
   background: #f9f9f9;
-  border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 4px 8px rgba(113, 72, 151, 0.15); /* subtle purple shadow */
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); 
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .card h3 {
   margin-bottom: 0.5rem;
   color: #714897; /* purple for card titles */
 }
-.card:hover {
-  background-color: #714897;
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #2A0637;
-  transition: all;
-}
-.card:hover h3,
-.card:hover .number,
-.card:hover .growth,
-.card:hover .status,
-.card:hover p,
-.card:hover span,
-.card:hover strong {
-  color: #ffffff;
-}
+
 .card:hover .goto-icon{
     background-color: #E0E0E0; /* Darker purple on hover */
     color: #714897; /* purple text */
 }
 
-.number {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #714897;
-}
 
 .growth, .status {
   font-size: 0.875rem;
