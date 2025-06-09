@@ -249,30 +249,34 @@ const resetDateFilters = () => {
                     </div>
 
                     {viewingEvent?.event_id === event.event_id && (
-                      <div className={`event-detail ${closing ? 'closing' : ''}`}
-                          data-aos={!closing ? "fade-down" : null} // disable AOS on close
+                      <div className={`event-detail ${closing ? 'closing' : 'visible'}`}
+                             data-aos={!closing ? "fade-down" : undefined}
                       >
                         <h3>{viewingEvent.event_name}</h3>
-                        <p><strong>Type:</strong> {viewingEvent.event_type?.type_name}</p>
-                        <p><strong>Description:</strong> {viewingEvent.event_description || 'N/A'}</p>
-                        <p><strong>Start:</strong> {new Date(viewingEvent.start_datetime).toLocaleString()}</p>
-                        <p><strong>End:</strong> {new Date(viewingEvent.end_datetime).toLocaleString()}</p>
-                        <p><strong>Location:</strong> {viewingEvent.location}</p>
-                        <p><strong>Venue Name:</strong> {viewingEvent.venue_name || 'N/A'}</p>
-                        <p><strong>Address:</strong> {viewingEvent.address || 'N/A'}</p>
-                        <p><strong>City:</strong> {viewingEvent.city || 'N/A'}</p>
-                        <p><strong>State:</strong> {viewingEvent.state || 'N/A'}</p>
-                        <p><strong>Country:</strong> {viewingEvent.country || 'N/A'}</p>
-                        <p><strong>Postal Code:</strong> {viewingEvent.postal_code || 'N/A'}</p>
-                        <p><strong>Budget:</strong> {viewingEvent.budget || 'N/A'}</p>
-                        <p><strong>Theme:</strong> {viewingEvent.theme || 'N/A'}</p>
-                        <p><strong>Notes:</strong> {viewingEvent.notes || 'N/A'}</p>
-                        <p><strong>Status:</strong> {viewingEvent.status}</p>
-                        <button onClick={() => {
-                          handleEditClick(viewingEvent);
-                          setViewingEvent(null);
-                        }}>Edit</button>
-                        <button onClick={handleClose} className="close-btn">Close</button>
+                        <div className="event-info-grid">
+                          <p><strong>Type:</strong> {viewingEvent.event_type?.type_name}</p>
+                          <p><strong>Description:</strong> {viewingEvent.event_description || 'N/A'}</p>
+                          <p><strong>Start:</strong> {new Date(viewingEvent.start_datetime).toLocaleString()}</p>
+                          <p><strong>End:</strong> {new Date(viewingEvent.end_datetime).toLocaleString()}</p>
+                          <p><strong>Location:</strong> {viewingEvent.location}</p>
+                          <p><strong>Venue Name:</strong> {viewingEvent.venue_name || 'N/A'}</p>
+                          <p><strong>Address:</strong> {viewingEvent.address || 'N/A'}</p>
+                          <p><strong>City:</strong> {viewingEvent.city || 'N/A'}</p>
+                          <p><strong>State:</strong> {viewingEvent.state || 'N/A'}</p>
+                          <p><strong>Country:</strong> {viewingEvent.country || 'N/A'}</p>
+                          <p><strong>Postal Code:</strong> {viewingEvent.postal_code || 'N/A'}</p>
+                          <p><strong>Budget:</strong> {viewingEvent.budget || 'N/A'}</p>
+                          <p><strong>Theme:</strong> {viewingEvent.theme || 'N/A'}</p>
+                          <p><strong>Notes:</strong> {viewingEvent.notes || 'N/A'}</p>
+                          <p><strong>Status:</strong> {viewingEvent.status}</p>
+                        </div>
+                        <div className="button-group">
+                          <button onClick={() => {
+                            handleEditClick(viewingEvent);
+                            setViewingEvent(null);
+                          }}>Edit</button>
+                          <button onClick={handleClose}>Close</button>
+                        </div>
                       </div>
                     )}
                   </React.Fragment>
@@ -469,9 +473,10 @@ const resetDateFilters = () => {
             </div>
 
           )}
-
-          <button type="submit">{editingEventId ? 'Update Event' : 'Create Event'}</button>
-          <button type="button" onClick={() => setShowCreateForm(false)}>Cancel</button>
+          <div className="button-row">
+            <button type="submit" className='create-update-button'>{editingEventId ? 'Update Event' : 'Create Event'}</button>
+            <button type="button" className='cancel-button'onClick={() => setShowCreateForm(false)}>Cancel</button>
+          </div>
         </form>
       )}
     </div>

@@ -10,6 +10,8 @@ import '../../css/users/UserFilter.css';
 import '../../css/users/UserSort.css';
 import '../../css/users/UserTable.css';
 import '../../css/users/UserPagination.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 import { toast, ToastContainer } from 'react-toastify';
 import { FiSearch, FiFilter, FiRefreshCw, FiMoreVertical, FiEdit2, FiEye, FiTrash2, FiCheck, FiClock, FiAlertTriangle } from 'react-icons/fi';
@@ -56,6 +58,9 @@ const EventTasks = () => {
   const [alert, setAlert] = useState(null);
   const [events, setEvents] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(null);
+  React.useEffect(() => {
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+  }, []);
 
   // Alert helper function
   const showAlert = (message, type, duration = 5000) => {
@@ -260,7 +265,7 @@ const EventTasks = () => {
       {viewMode === 'table' && (
         <>
           <div className="stats-grid">
-            <div className="stat-card stat-card-total">
+            <div className="stat-card stat-card-total" data-aos="zoom-in">
               <div className="stat-content">
                 <p className="stat-label">Total Tasks</p>
                 <p className="stat-value">{totalTasks}</p>
@@ -270,7 +275,7 @@ const EventTasks = () => {
               </div>
             </div>
 
-            <div className="stat-card stat-card-active">
+            <div className="stat-card stat-card-active" data-aos="zoom-in">
               <div className="stat-content">
                 <p className="stat-label">Completed</p>
                 <p className="stat-value">{completedTasks}</p>
@@ -280,7 +285,7 @@ const EventTasks = () => {
               </div>
             </div>
 
-            <div className="stat-card stat-card-new">
+            <div className="stat-card stat-card-new" data-aos="zoom-in">
               <div className="stat-content">
                 <p className="stat-label">High Priority</p>
                 <p className="stat-value">{highPriorityTasks}</p>
@@ -292,7 +297,7 @@ const EventTasks = () => {
           </div>
 
           {/* Search and Filter Bar */}
-          <div className="search-filter-container">
+          <div className="search-filter-container" data-aos="fade-up">
             <div className="search-filter-content">
               <p className='search-filter-content-title'>Task List</p>
               <button
@@ -473,7 +478,7 @@ const EventTasks = () => {
       )}
 
       {/* Main Table */}
-      <div className="tasks-table-container">
+      <div className="tasks-table-container" data-aos="fade-up">
         {viewMode === 'table' ? (
           <>
             <div className="table-responsive">

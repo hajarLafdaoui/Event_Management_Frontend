@@ -1,11 +1,13 @@
 import React from 'react';
 import '../../css/DashboardContentClient.css';
+import '../../css/users/UserStats.css';
 import { Plus, Upload } from 'lucide-react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useEvents } from '../../context/EventContext';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { FiSearch, FiFilter, FiRefreshCw, FiMoreVertical, FiEdit2, FiEye, FiTrash2, FiCheck, FiClock, FiAlertTriangle } from 'react-icons/fi';
 function DashboardContent({ onSelectMenu}) {
 const [hovered, setHovered] = React.useState(false);
   const { events, loading, error } = useEvents();
@@ -45,29 +47,59 @@ const upcomingEvents = events
       ) : (
         <>
          <div className="stats-grid">
-            <div className="card" data-aos="zoom-in">
-              <h3>Total Events</h3>
-              <div className="number">{events.length}</div>
+            <div className="stat-card stat-card-total" data-aos="zoom-in">
+              <div className="stat-content" >
+                <p className="stat-label">Total Events</p>
+                <p className="stat-value">{events.length}</p>
+              </div>
+              <div className="stat-icon-container stat-icon-total">
+                  <FiCheck className="task-icon" />
+              </div>
             </div>
-            <div className="card" data-aos="zoom-in">
-              <h3>Draft</h3>
-              <div className="number">{draftEvents}</div>
+            <div className="stat-card stat-card-draft" data-aos="zoom-in">
+              <div className="stat-content" >
+                <p className="stat-label">Draft</p>
+                <p className="stat-value">{draftEvents}</p>
+              </div>
+              <div className="stat-icon-container stat-icon-draft">
+                <FiClock className="task-icon" />
+              </div>
             </div>
-            <div className="card" data-aos="zoom-in">
-              <h3>Planned</h3>
-              <div className="number" >{plannedEvents}</div>
+            <div className="stat-card stat-card-planned" data-aos="zoom-in">
+              <div className="stat-content" >
+                <p className="stat-label">Planned</p>
+                <p className="stat-value">{plannedEvents}</p>
+              </div>
+              <div className="stat-icon-container stat-icon-new">
+                <FiAlertTriangle className="task-icon" />
+              </div>
             </div>
-            <div className="card" data-aos="zoom-in">
-              <h3>In Progress</h3>
-              <div className="number">{inProgressEvents}</div>
+            <div className="stat-card stat-card-in-progress" data-aos="zoom-in">
+              <div className="stat-content" >
+                <p className="stat-label">In Progress</p>
+                <p className="stat-value">{inProgressEvents}</p>
+              </div>
+              <div className="stat-icon-container stat-icon-in-progress">
+                <FiEdit2 className="task-icon" />
+              </div>
             </div>
-            <div className="card" data-aos="zoom-in">
-              <h3>Completed</h3>
-              <div className="number">{completedEvents}</div>
+            <div className="stat-card stat-card-active"data-aos="zoom-in">
+              <div className="stat-content" >
+                <p className="stat-label">Completed</p>
+                <p className="stat-value">{completedEvents}</p>
+              </div>
+              <div className="stat-icon-container stat-icon-active">
+                <FiCheck className="task-icon" />
+              </div>  
             </div>
-            <div className="card" data-aos="zoom-in">
-              <h3>Cancelled</h3>
-              <div className="number">{cancelledEvents}</div>
+            <div className="stat-card stat-card-cancelled"data-aos="zoom-in">
+              <div className="stat-content" >
+                <p className="stat-label">Cancelled</p>
+                <p className="stat-value">{cancelledEvents}</p>
+              </div>
+              <div className="stat-icon-container stat-icon-cancelled">
+                <FiTrash2 className="task-icon" />
+              </div>
             </div>
           </div>
 
@@ -110,7 +142,7 @@ const upcomingEvents = events
               </ul>
             </div>
 
-            <div className="card progress" data-aos="zomm-left" onMouseEnter={() => setHovered(true)}
+            <div className="card progress"  onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
                >
               <h3>Overall Progress</h3>
@@ -118,8 +150,8 @@ const upcomingEvents = events
                 value={progress}
                 text={`${progress}%`}
                 styles={buildStyles({
-                  pathColor: hovered ? '#2A0637' : '#714897',
-                  textColor: hovered ? '#ffffff' : '#5a3773',
+                  pathColor:  '#714897',
+                  textColor:  '#5a3773',
                   trailColor: '#e0e0e0',
                 })}
               />
