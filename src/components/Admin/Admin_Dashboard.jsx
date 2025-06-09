@@ -25,12 +25,14 @@ import {
     FiMail,
     FiPhone,
     FiShield,
-    FiEdit
+    FiEdit,
+    FiGrid
 } from 'react-icons/fi';
 import UserList from './Users/UserList';
 import Dashboard_content from './Dashboard_content';
 import UpdateProfile from '../Auth/UpdateProfile';
 import UpdatePassword from '../Auth/UpdatePassword';
+import CategoriesManagement from './Categories/CategoriesManagement';
 
 const Admin_Dashboard = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -49,6 +51,7 @@ const Admin_Dashboard = () => {
 const menuItems = useMemo(() => [
     { icon: <FiHome />, text: 'Dashboard', key: 'dashboard' },
     { icon: <FiUsers />, text: 'User Management', key: 'users' },
+     { icon: <FiGrid />, text: 'Categories Management', key: 'categories' },
     { icon: <FiUserCheck />, text: 'Vendor Approvals', key: 'vendors' },
     { icon: <FiFlag />, text: 'Content Moderation', key: 'content' },
     { icon: <FiCalendar />, text: 'Events Oversight', key: 'events' },
@@ -192,6 +195,8 @@ const handleResendVerification = useCallback(async () => {
         switch (selectedMenu) {
             case 'dashboard': return <Dashboard_content />;
             case 'users': return <UserList />;
+                    case 'categories': return <CategoriesManagement />; // Add this line
+
             default: return <Dashboard_content />;
         }
     }, [selectedMenu]);
