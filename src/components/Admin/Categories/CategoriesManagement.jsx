@@ -288,9 +288,9 @@ const CategoriesManagement = () => {
                         is_active: true
                     });
                     setShowCreateModal(true);
-                }} className="create-btn">
+                }} className="create-btn-cat">
                     <Plus size={16} />
-                    Create New {activeTab === 'event' ? 'Event' : 'Vendor'} Category
+                   <span>Create New {activeTab === 'event' ? 'Event' : 'Vendor'} Category</span> 
                 </button>
             </div>
 

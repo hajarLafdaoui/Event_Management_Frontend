@@ -101,6 +101,19 @@
   justify-content: flex-end;
   margin-top: 20px;
 }
+ .create-btn-cat{
+background-color: #f5f7fa;
+  color: #2A0637;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+    gap: 0.3rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  align-items: center;
+  margin-top: 10px;
+ } 
 .create-button-container .create-btn {
   background-color: #f5f7fa;
   color: #2A0637;
@@ -118,7 +131,7 @@
 }
 
 
-.create-btn:hover {
+.create-btn-cat,.create-btn:hover {
   background-color: #5d3c7a; /* darker shade */
   color: #ffffff;
   transition: background-color 0.3s ease;

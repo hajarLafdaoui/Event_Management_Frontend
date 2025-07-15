@@ -33,6 +33,7 @@ import Dashboard_content from './Dashboard_content';
 import UpdateProfile from '../Auth/UpdateProfile';
 import UpdatePassword from '../Auth/UpdatePassword';
 import CategoriesManagement from './Categories/CategoriesManagement';
+import VendorApprovals from './Vendor/VendorApprovals';
 
 const Admin_Dashboard = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -47,16 +48,17 @@ const Admin_Dashboard = () => {
     const [showUpdateProfileModal, setShowUpdateProfileModal] = useState(false);
     const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useState(false);
     const [updateSuccess, setUpdateSuccess] = useState(false);
-// Move this outside the JSX to the top level of the component
-const menuItems = useMemo(() => [
-    { icon: <FiHome />, text: 'Dashboard', key: 'dashboard' },
-    { icon: <FiUsers />, text: 'User Management', key: 'users' },
-     { icon: <FiGrid />, text: 'Categories Management', key: 'categories' },
-    { icon: <FiUserCheck />, text: 'Vendor Approvals', key: 'vendors' },
-    { icon: <FiFlag />, text: 'Content Moderation', key: 'content' },
-    { icon: <FiCalendar />, text: 'Events Oversight', key: 'events' },
-    { icon: <FiSettings />, text: 'System Settings', key: 'settings' }
-], []);
+    // Move this outside the JSX to the top level of the component
+    const menuItems = useMemo(() => [
+        { icon: <FiHome />, text: 'Dashboard', key: 'dashboard' },
+        { icon: <FiUsers />, text: 'User Management', key: 'users' },
+        { icon: <FiGrid />, text: 'Categories Management', key: 'categories' },
+        { icon: <FiUserCheck />, text: 'Vendor Approvals', key: 'vendors' },
+
+        { icon: <FiFlag />, text: 'Content Moderation', key: 'content' },
+        { icon: <FiCalendar />, text: 'Events Oversight', key: 'events' },
+        { icon: <FiSettings />, text: 'System Settings', key: 'settings' }
+    ], []);
 
     // Memoized user data to prevent unnecessary re-renders
     const memoizedUser = useMemo(() => user, [
@@ -73,21 +75,21 @@ const menuItems = useMemo(() => [
 
     const [resendStatus, setResendStatus] = useState({ message: '', error: '' });
 
-// Add this function to handle resending verification
-const handleResendVerification = useCallback(async () => {
-  try {
-    await api.post('/auth/email/resend', { email: memoizedUser.email });
-    setResendStatus({
-      message: 'Verification email has been resent successfully!',
-      error: ''
-    });
-  } catch (err) {
-    setResendStatus({
-      message: '',
-      error: err.response?.data?.message || 'Failed to resend verification email'
-    });
-  }
-}, [memoizedUser]);
+    // Add this function to handle resending verification
+    const handleResendVerification = useCallback(async () => {
+        try {
+            await api.post('/auth/email/resend', { email: memoizedUser.email });
+            setResendStatus({
+                message: 'Verification email has been resent successfully!',
+                error: ''
+            });
+        } catch (err) {
+            setResendStatus({
+                message: '',
+                error: err.response?.data?.message || 'Failed to resend verification email'
+            });
+        }
+    }, [memoizedUser]);
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem('user'));
         if (!userData) {
@@ -195,7 +197,9 @@ const handleResendVerification = useCallback(async () => {
         switch (selectedMenu) {
             case 'dashboard': return <Dashboard_content />;
             case 'users': return <UserList />;
-                    case 'categories': return <CategoriesManagement />; // Add this line
+            case 'categories': return <CategoriesManagement />; // Add this line
+            case 'vendors': return <VendorApprovals />; // Add this line
+
 
             default: return <Dashboard_content />;
         }
@@ -270,18 +274,18 @@ const handleResendVerification = useCallback(async () => {
                 )}
 
                 <nav className="sidebar-nav">
-                     <ul>
-        {menuItems.map((item) => (
-            <li
-                key={item.key}
-                className={selectedMenu === item.key ? 'active' : ''}
-                onClick={() => handleMenuClick(item.key)}
-            >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-text">{item.text}</span>
-            </li>
-        ))}
-    </ul>
+                    <ul>
+                        {menuItems.map((item) => (
+                            <li
+                                key={item.key}
+                                className={selectedMenu === item.key ? 'active' : ''}
+                                onClick={() => handleMenuClick(item.key)}
+                            >
+                                <span className="nav-icon">{item.icon}</span>
+                                <span className="nav-text">{item.text}</span>
+                            </li>
+                        ))}
+                    </ul>
                 </nav>
 
                 <div className="sidebar-footer">
@@ -395,34 +399,34 @@ const handleResendVerification = useCallback(async () => {
                                 </div>
                             </div>
 
-                          <div className="detail-item">
-  <FiMail className="detail-icon" />
-  <div>
-    <span className="detail-label">Email</span>
-    <span className="detail-value">{memoizedUser.email}</span>
-    {memoizedUser.email_verified_at ? (
-      <span className="verified-badge">Verified</span>
-    ) : (
-      <div className="verification-action">
-        <span className="unverified-badge">Not Verified</span>
-        <button 
-          className="resend-link"
-          onClick={handleResendVerification}
-        >
-          Resend Verification
-        </button>
-        
-        {/* Show status messages */}
-        {resendStatus.message && (
-          <p className="resend-success">{resendStatus.message}</p>
-        )}
-        {resendStatus.error && (
-          <p className="resend-error">{resendStatus.error}</p>
-        )}
-      </div>
-    )}
-  </div>
-</div>
+                            <div className="detail-item">
+                                <FiMail className="detail-icon" />
+                                <div>
+                                    <span className="detail-label">Email</span>
+                                    <span className="detail-value">{memoizedUser.email}</span>
+                                    {memoizedUser.email_verified_at ? (
+                                        <span className="verified-badge">Verified</span>
+                                    ) : (
+                                        <div className="verification-action">
+                                            <span className="unverified-badge">Not Verified</span>
+                                            <button
+                                                className="resend-link"
+                                                onClick={handleResendVerification}
+                                            >
+                                                Resend Verification
+                                            </button>
+
+                                            {/* Show status messages */}
+                                            {resendStatus.message && (
+                                                <p className="resend-success">{resendStatus.message}</p>
+                                            )}
+                                            {resendStatus.error && (
+                                                <p className="resend-error">{resendStatus.error}</p>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
 
                             <div className="detail-item">
                                 <FiPhone className="detail-icon" />
@@ -625,38 +629,38 @@ const handleResendVerification = useCallback(async () => {
                     </div>
                 </div>
             </div>
-            
+
             {/* Update Profile Modal */}
             {showUpdateProfileModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h3>Edit Profile</h3>
-                            <button 
-                                className="modal-close-btn" 
+                            <button
+                                className="modal-close-btn"
                                 onClick={handleUpdateProfileClose}
                             >
                                 <FiX />
                             </button>
                         </div>
-                        <UpdateProfile 
+                        <UpdateProfile
                             key={memoizedUser.id} // Force re-render when user changes
-                            user={memoizedUser} 
-                            onBack={handleUpdateProfileClose} 
+                            user={memoizedUser}
+                            onBack={handleUpdateProfileClose}
                             onSuccess={handleProfileUpdateSuccess}
                         />
                     </div>
                 </div>
             )}
-            
+
             {/* Update Password Modal */}
             {showUpdatePasswordModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h3>Update Password</h3>
-                            <button 
-                                className="modal-close-btn" 
+                            <button
+                                className="modal-close-btn"
                                 onClick={handleUpdatePasswordClose}
                             >
                                 <FiX />
@@ -666,7 +670,7 @@ const handleResendVerification = useCallback(async () => {
                     </div>
                 </div>
             )}
-            
+
             {/* Logout Confirmation */}
             {showLogoutConfirm && (
                 <div className="logout-confirmation-overlay">
