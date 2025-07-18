@@ -57,8 +57,8 @@
   margin-bottom: 12px;
   border-radius: 12px;
   border-left: 4px solid #714897;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer; /* Optional: show it's interactive */
+  transition: background-color 1s, transform 1s;
 }
 
 .event-card:hover {
@@ -67,6 +67,8 @@
   transition: background-color 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-left: 4px solid #2A0637 ; /* Change border color on hover */
+  transform: scale(1.05);
+
 }
 
 .event-card:hover h3,
