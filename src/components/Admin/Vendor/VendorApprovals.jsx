@@ -52,12 +52,12 @@ const VendorApprovals = () => {
   const fetchVendors = async () => {
     try {
       setLoading(true);
-     const response = await api.get('/vendors', {
-  params: {
-    page: pagination.currentPage,
-    per_page: pagination.perPage
-  }
-});
+      const response = await api.get('/vendors', {
+        params: {
+          page: pagination.currentPage,
+          per_page: pagination.perPage
+        }
+      });
 
       setVendors(response.data.data);
       setPagination(prev => ({
@@ -106,23 +106,32 @@ const VendorApprovals = () => {
     }
   };
 
-const handleViewDetails = async (vendor) => {
-  try {
-    const response = await api.get(`/vendors/${vendor.id}`, {
-      params: { 
-        with: 'availabilities,portfolios,services,user'
+  const handleViewDetails = async (vendor) => {
+    try {
+      const response = await api.get(`/vendors/${vendor.id}`, {
+        params: {
+          with: 'availabilities,portfolios,services,user'
+        }
+      });
+
+      // Normalize the response structure
+      const vendorData = response.data.data;
+
+      // If user data is nested under 'data', extract it
+      if (vendorData.user && vendorData.user.data) {
+        vendorData.user = vendorData.user.data;
       }
-    });
-    
-    console.log("Vendor API Response:", response.data); // Debugging
-    
-    // CORRECTED: Access the nested data property
-    setSelectedVendor(response.data.data);
-    setViewMode('show');
-  } catch (error) {
-    console.error('Error loading vendor details', error);
-  }
-};
+
+      setSelectedVendor(vendorData);
+      setViewMode('show');
+
+      // Log the data for debugging
+      console.log("Vendor Data:", vendorData);
+      console.log("User Data:", vendorData.user);
+    } catch (error) {
+      console.error('Error loading vendor details', error);
+    }
+  };
   const toggleDropdown = (vendorId) => {
     setDropdownOpen(dropdownOpen === vendorId ? null : vendorId);
   };
@@ -232,6 +241,12 @@ const handleViewDetails = async (vendor) => {
                           <div className="user-fullname">
                             {vendor.business_name}
                           </div>
+                          {/* Add this section for user details */}
+                          {vendor.user && (
+                            <div className="user-subtext">
+                              Created by: {vendor.user.first_name} {vendor.user.last_name}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </td>

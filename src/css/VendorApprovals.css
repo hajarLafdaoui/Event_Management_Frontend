@@ -219,9 +219,78 @@
   justify-content: flex-end;
 }
 
-/* Created By */
+/* Created By Section */
 
 
+
+.user-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+/* User Info Grid */
+.user-info-section {
+  width: 100% !important;
+  /* max-width: 600px; */
+}
+.user-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  width: 100% !important;
+  gap: 10px; /* Remove all gaps between items */
+  margin-top: 10px; /* Remove any default margins */
+  margin-bottom: 15px; /* Remove any default margins */
+  padding: 0; /* Remove any default padding */
+  border-collapse: collapse; /* Merge adjacent borders */
+}
+
+.user-info-item {
+  background: white;
+  border-radius: 0; /* Remove rounded corners for seamless fit */
+  padding: 15px;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  margin: 0; /* Remove any margins */
+  
+  /* Remove right border for all except last column items */
+  &:not(:nth-child(3n)) {
+    border-right: none;
+  }
+  
+  /* Remove bottom border for all except last row items */
+  &:not(:nth-last-child(-n+3)) {
+    border-bottom: none;
+  }
+}
+.info-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #777;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 1.1rem;
+  color: #333;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+  .user-details-container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+ 
+  
+  
+}
 
 /* Social Links */
 .social-links-grid {
@@ -243,6 +312,8 @@
 
 .social-link:hover {
   transform: translateY(-2px);
+  color: white;
+
 }
 
 .social-link.instagram {
@@ -349,8 +420,9 @@
 /* Services & Packages */
 .services-container {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 20px;
+    grid-template-columns: repeat(3, 1fr); 
+
 }
 
 .service-card {
