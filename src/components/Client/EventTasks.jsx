@@ -302,7 +302,7 @@ const EventTasks = () => {
               <p className='search-filter-content-title'>Task List</p>
               <button
                 onClick={() => setViewMode('create')}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+                className="create-task-button"
               >
                 Create Task
               </button>
