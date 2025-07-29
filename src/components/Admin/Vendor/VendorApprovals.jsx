@@ -9,6 +9,7 @@ import '../../../css/users/UserFilter.css';
 import '../../../css/users/UserSort.css';
 import '../../../css/users/UserTable.css';
 import '../../../css/users/UserPagination.css';
+
 // import '../../../css/users/RejectModal.css'; // New CSS file
 import VendorApprovalDetail from './VendorApprovalDetail';
 import Alert from '../../ReusableComponent/Alert';
@@ -185,54 +186,69 @@ const VendorApprovals = () => {
         />
       )}
 
-      {/* Rejection Reason Modal */}
-      {showRejectModal && (
-        <div className="modal-overlay">
-          <div className="reject-modal">
-            <div className="modal-header">
-              <h3>Reject Vendor Application</h3>
-              <button 
-                className="modal-close" 
-                onClick={() => setShowRejectModal(false)}
-              >
-                &times;
-              </button>
+   {showRejectModal && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h3>Reject Vendor Application</h3>
+        <button
+          className="modal-close-btn"
+          onClick={() => setShowRejectModal(false)}
+        >
+          <FiX />
+        </button>
+      </div>
+
+      <div className="event-content">
+        <div className="form-section">
+          <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label">
+                Business Name
+              </label>
+              <div className="business-name-display">
+                {rejectingVendor?.business_name}
+              </div>
             </div>
-            
-            <div className="modal-body">
-              <p>Please provide a reason for rejecting <strong>{rejectingVendor?.business_name}</strong>:</p>
-              
+
+            <div className="form-group">
+              <label className="form-label">
+                Rejection Reason *
+              </label>
               <textarea
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
-                placeholder="Enter rejection reason..."
-                rows={4}
-                className="rejection-textarea"
+                placeholder="Explain why this application is being rejected..."
+                className="form-input"
+                style={{ minHeight: '100px' }}
+                required
               />
-              
               {!rejectionReason.trim() && (
-                <p className="error-hint">Rejection reason is required</p>
+                <p className="error-hint">Please provide a rejection reason</p>
               )}
-            </div>
-            
-            <div className="modal-footer">
-              <button 
-                className="btn-cancel"
-                onClick={() => setShowRejectModal(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className="btn-confirm-reject"
-                onClick={confirmRejection}
-                disabled={!rejectionReason.trim()}
-              >
-                Confirm Rejection
-              </button>
             </div>
           </div>
         </div>
-      )}
+
+        <div className="form-actions">
+          <button
+            className="btn-secondary-save"
+            onClick={() => setShowRejectModal(false)}
+          >
+            Cancel
+          </button>
+          <button
+            className="btn-primary-save"
+            onClick={confirmRejection}
+            disabled={!rejectionReason.trim()}
+          >
+            Confirm Rejection
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Search and Filter Bar */}
       <div className="search-filter-container">
