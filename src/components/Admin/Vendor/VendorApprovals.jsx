@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FiUserCheck, FiFileText, FiClock, FiCheck, FiX, FiSearch, FiMoreVertical, FiFilter } from 'react-icons/fi';
+import { FiUserCheck, FiFileText, FiClock, FiCheck, FiX, FiSearch, 
+         FiMoreVertical, FiFilter, FiEye, FiRefreshCw } from 'react-icons/fi';
 import api from '../../../api/api';
 import '../../../css/users/UserStats.css';
 import '../../../css/users/UserTitle.css';
@@ -8,10 +9,12 @@ import '../../../css/users/UserFilter.css';
 import '../../../css/users/UserSort.css';
 import '../../../css/users/UserTable.css';
 import '../../../css/users/UserPagination.css';
+// import '../../../css/users/RejectModal.css'; // New CSS file
 import VendorApprovalDetail from './VendorApprovalDetail';
+import Alert from '../../ReusableComponent/Alert';
 
 const VendorApprovals = () => {
-  const [viewMode, setViewMode] = useState('table'); // 'table' or 'show'
+  const [viewMode, setViewMode] = useState('table');
   const [vendors, setVendors] = useState([]);
   const [filteredVendors, setFilteredVendors] = useState([]);
   const [selectedVendor, setSelectedVendor] = useState(null);
@@ -23,18 +26,29 @@ const VendorApprovals = () => {
     total: 0
   });
   const [dropdownOpen, setDropdownOpen] = useState(null);
-  const [filters, setFilters] = useState({
-    status: ''
-  });
+  const [filters, setFilters] = useState({ status: '' });
   const [showFilters, setShowFilters] = useState(false);
+  const [alert, setAlert] = useState(null);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectingVendor, setRejectingVendor] = useState(null);
+  const [rejectionReason, setRejectionReason] = useState('');
 
-  // Fetch vendors only when pagination changes
+  // Alert helper function
+  const showAlert = (message, type, duration = 5000) => {
+    setAlert({ message, type, duration });
+    setTimeout(() => setAlert(null), duration);
+  };
+
+  // Fetch vendors
   useEffect(() => {
     fetchVendors();
   }, [pagination.currentPage]);
 
   useEffect(() => {
-    // Filter vendors based on search and status
+    filterVendors();
+  }, [vendors, searchTerm, filters]);
+
+  const filterVendors = () => {
     let filtered = vendors.filter(vendor => {
       return (
         vendor.business_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -47,7 +61,7 @@ const VendorApprovals = () => {
     }
 
     setFilteredVendors(filtered);
-  }, [vendors, searchTerm, filters]);
+  };
 
   const fetchVendors = async () => {
     try {
@@ -55,7 +69,8 @@ const VendorApprovals = () => {
       const response = await api.get('/vendors', {
         params: {
           page: pagination.currentPage,
-          per_page: pagination.perPage
+          per_page: pagination.perPage,
+          fields: 'id,business_name,contact_email,status,category,country,city,rejection_reason,user'
         }
       });
 
@@ -66,44 +81,61 @@ const VendorApprovals = () => {
       }));
     } catch (error) {
       console.error('Error fetching vendors:', error);
+      showAlert('Failed to load vendor applications', 'error');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleApprove = async (vendorId) => {
-    try {
-      await api.post(`/vendor-approvals/vendor/${vendorId}`, {
-        action: 'approved'
-      });
+ const updateVendorStatus = async (vendorId, status, rejectionReason = '') => {
+  try {
+    // Update UI immediately
+    setVendors(prev => prev.map(v =>
+      v.id === vendorId ? { ...v, status } : v
+    ));
 
-      // Update local state
-      setVendors(prev => prev.map(v =>
-        v.id === vendorId ? { ...v, status: 'approved' } : v
-      ));
+    // Prepare request data
+    const data = {
+      action: status,
+      notes: 'Status updated via admin panel'
+    };
 
-      setSelectedVendor(null);
-    } catch (error) {
-      console.error('Approval failed:', error);
+    // Add rejection reason only for rejected status
+    if (status === 'rejected') {
+      data.rejection_reason = rejectionReason;
     }
+
+    // Use the correct endpoint
+    await api.post(`/vendor-approvals/vendor/${vendorId}`, data);
+
+    // Show success alert
+    showAlert(`Vendor status updated to ${status}`, 'success');
+    setDropdownOpen(null);
+  } catch (error) {
+    // Revert UI change on error
+    setVendors(prev => prev.map(v => 
+      v.id === vendorId ? { ...v, status: v.status } : v
+    ));
+    
+    showAlert(`Failed to update status: ${error.response?.data?.message || error.message}`, 'error');
+  }
+};
+
+  const handleRejectVendor = (vendor) => {
+    setRejectingVendor(vendor);
+    setShowRejectModal(true);
+    setDropdownOpen(null);
   };
 
-  const handleReject = async (vendorId, reason) => {
-    try {
-      await api.post(`/vendor-approvals/vendor/${vendorId}`, {
-        action: 'rejected',
-        rejection_reason: reason
-      });
-
-      // Update local state
-      setVendors(prev => prev.map(v =>
-        v.id === vendorId ? { ...v, status: 'rejected' } : v
-      ));
-
-      setSelectedVendor(null);
-    } catch (error) {
-      console.error('Rejection failed:', error);
+  const confirmRejection = () => {
+    if (!rejectionReason.trim()) {
+      showAlert('Please enter a rejection reason', 'error');
+      return;
     }
+    
+    updateVendorStatus(rejectingVendor.id, 'rejected', rejectionReason);
+    setShowRejectModal(false);
+    setRejectionReason('');
   };
 
   const handleViewDetails = async (vendor) => {
@@ -114,24 +146,19 @@ const VendorApprovals = () => {
         }
       });
 
-      // Normalize the response structure
       const vendorData = response.data.data;
-
-      // If user data is nested under 'data', extract it
       if (vendorData.user && vendorData.user.data) {
         vendorData.user = vendorData.user.data;
       }
 
       setSelectedVendor(vendorData);
       setViewMode('show');
-
-      // Log the data for debugging
-      console.log("Vendor Data:", vendorData);
-      console.log("User Data:", vendorData.user);
     } catch (error) {
       console.error('Error loading vendor details', error);
+      showAlert('Failed to load vendor details', 'error');
     }
   };
+
   const toggleDropdown = (vendorId) => {
     setDropdownOpen(dropdownOpen === vendorId ? null : vendorId);
   };
@@ -148,6 +175,65 @@ const VendorApprovals = () => {
 
   return (
     <div className="user-list-container">
+      {/* Alert Container */}
+      {alert && (
+        <Alert
+          message={alert.message}
+          type={alert.type}
+          duration={alert.duration}
+          onClose={() => setAlert(null)}
+        />
+      )}
+
+      {/* Rejection Reason Modal */}
+      {showRejectModal && (
+        <div className="modal-overlay">
+          <div className="reject-modal">
+            <div className="modal-header">
+              <h3>Reject Vendor Application</h3>
+              <button 
+                className="modal-close" 
+                onClick={() => setShowRejectModal(false)}
+              >
+                &times;
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              <p>Please provide a reason for rejecting <strong>{rejectingVendor?.business_name}</strong>:</p>
+              
+              <textarea
+                value={rejectionReason}
+                onChange={(e) => setRejectionReason(e.target.value)}
+                placeholder="Enter rejection reason..."
+                rows={4}
+                className="rejection-textarea"
+              />
+              
+              {!rejectionReason.trim() && (
+                <p className="error-hint">Rejection reason is required</p>
+              )}
+            </div>
+            
+            <div className="modal-footer">
+              <button 
+                className="btn-cancel"
+                onClick={() => setShowRejectModal(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="btn-confirm-reject"
+                onClick={confirmRejection}
+                disabled={!rejectionReason.trim()}
+              >
+                Confirm Rejection
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Search and Filter Bar */}
       <div className="search-filter-container">
         <div className="search-filter-content">
@@ -221,19 +307,21 @@ const VendorApprovals = () => {
                 <th className="table-header-name">Business</th>
                 <th className="table-header-role">Category</th>
                 <th className="table-header-email">Country/City</th>
+                <th className="table-header-status">Status</th>
+                <th className="table-header-reason">Rejection Reason</th>
                 <th className="table-header-actions">Actions</th>
               </tr>
             </thead>
             <tbody className="table-body">
               {filteredVendors.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="no-results">
+                  <td colSpan="7" className="no-results">
                     No vendors found
                   </td>
                 </tr>
               ) : (
                 filteredVendors.map(vendor => (
-                  <tr key={vendor.id} className="table-row">
+                  <tr key={`${vendor.id}-${vendor.status}`} className="table-row">
                     <td className="table-cell-id">{vendor.id}</td>
                     <td className="table-cell-name">
                       <div className="user-name-container">
@@ -241,7 +329,6 @@ const VendorApprovals = () => {
                           <div className="user-fullname">
                             {vendor.business_name}
                           </div>
-                          {/* Add this section for user details */}
                           {vendor.user && (
                             <div className="user-subtext">
                               Created by: {vendor.user.first_name} {vendor.user.last_name}
@@ -258,6 +345,22 @@ const VendorApprovals = () => {
                         {vendor.country}, {vendor.city}
                       </div>
                     </td>
+                    <td className="table-cell-status">
+                      <span className={`status-badge ${vendor.status}`}>
+                        {vendor.status}
+                      </span>
+                    </td>
+                    <td className="table-cell-reason">
+                      {vendor.rejection_reason ? (
+                        <div className="rejection-reason-container">
+                          <div className="rejection-reason-text">
+                            {vendor.rejection_reason}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="no-reason">-</span>
+                      )}
+                    </td>
                     <td className="table-cell-actions">
                       <div className="actions-dropdown-container">
                         <button
@@ -268,12 +371,40 @@ const VendorApprovals = () => {
                         </button>
                         {dropdownOpen === vendor.id && (
                           <div className="actions-dropdown">
-                            <button
+                            <button 
+                              className="action-btn view-details"
                               onClick={() => handleViewDetails(vendor)}
-                              className="actions-dropdown-item"
                             >
-                              View Details
+                              <FiEye className="action-icon" />
+                              <span>View Details</span>
                             </button>
+                            {vendor.status === 'pending' && (
+                              <>
+                                <button 
+                                  className="action-btn approve"
+                                  onClick={() => updateVendorStatus(vendor.id, 'approved')}
+                                >
+                                  <FiCheck className="action-icon" />
+                                  <span>Approve</span>
+                                </button>
+                                <button 
+                                  className="action-btn reject"
+                                  onClick={() => handleRejectVendor(vendor)}
+                                >
+                                  <FiX className="action-icon" />
+                                  <span>Reject</span>
+                                </button>
+                              </>
+                            )}
+                            {/* {(vendor.status === 'approved' || vendor.status === 'rejected') && (
+                              <button 
+                                className="action-btn reset"
+                                onClick={() => updateVendorStatus(vendor.id, 'pending')}
+                              >
+                                <FiRefreshCw className="action-icon" />
+                                <span>Reset to Pending</span>
+                              </button> */}
+                            {/* )} */}
                           </div>
                         )}
                       </div>
