@@ -34,6 +34,7 @@ import UpdateProfile from '../Auth/UpdateProfile';
 import UpdatePassword from '../Auth/UpdatePassword';
 import CategoriesManagement from './Categories/CategoriesManagement';
 import VendorApprovals from './Vendor/VendorApprovals';
+import EventManagement from './Event/EventManagement';
 
 const Admin_Dashboard = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -55,8 +56,10 @@ const Admin_Dashboard = () => {
         { icon: <FiGrid />, text: 'Categories Management', key: 'categories' },
         { icon: <FiUserCheck />, text: 'Vendor Approvals', key: 'vendors' },
 
-        { icon: <FiFlag />, text: 'Content Moderation', key: 'content' },
         { icon: <FiCalendar />, text: 'Events Oversight', key: 'events' },
+
+
+        { icon: <FiFlag />, text: 'Content Moderation', key: 'content' },
         { icon: <FiSettings />, text: 'System Settings', key: 'settings' }
     ], []);
 
@@ -199,6 +202,8 @@ const Admin_Dashboard = () => {
             case 'users': return <UserList />;
             case 'categories': return <CategoriesManagement />; // Add this line
             case 'vendors': return <VendorApprovals />; // Add this line
+            case 'events': return <EventManagement />; // Add this line
+
 
 
             default: return <Dashboard_content />;
