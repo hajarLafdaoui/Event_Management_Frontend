@@ -43,10 +43,11 @@
     overflow: hidden;
 }
 
+
 .tab-indicator {
     height: 3px;
-    width: 50%; /* Each indicator takes half the container width */
     background: #714897;
     border-radius: 3px 3px 0 0;
+    /* Transition for transform instead of left */
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

@@ -11,7 +11,6 @@ import ConfirmDialog from '../../ReusableComponent/ConfirmDialog';
 import Alert from '../../ReusableComponent/Alert';
 
 const CategoriesManagement = () => {
-    const [activeTab, setActiveTab] = useState('event');
     const [eventCategories, setEventCategories] = useState([]);
     const [vendorCategories, setVendorCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +45,16 @@ const CategoriesManagement = () => {
     });
     const [showFilters, setShowFilters] = useState(false);
     const [showSort, setShowSort] = useState(false);
+    const [activeTab, setActiveTab] = useState('event');
+    const tabs = [
+        { id: 'event', label: 'Event Categories' },
+        { id: 'vendor', label: 'Vendor Categories' }
+    ];
 
+    // Calculate indicator position
+    const activeIndex = tabs.findIndex(tab => tab.id === activeTab);
+    const tabWidth = 100 / tabs.length;
+    const leftPosition = activeIndex * tabWidth;
     // Show alert helper function
     const showAlert = (message, type, duration = 5000) => {
         setAlert({ message, type, duration });
@@ -205,7 +213,7 @@ const CategoriesManagement = () => {
             );
         }
 
-     
+
 
         // Sort
         result.sort((a, b) => {
@@ -256,28 +264,27 @@ const CategoriesManagement = () => {
             {/* Tabs and rest of the component remains the same */}
             <div className="tabs-container">
                 <div className="tabs">
-                    <button
-                        className={`tab ${activeTab === 'event' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('event')}
-                    >
-                        Event Categories
-                    </button>
-                    <button
-                        className={`tab ${activeTab === 'vendor' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('vendor')}
-                    >
-                        Vendor Categories
-                    </button>
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            className={`tab ${activeTab === tab.id ? 'active' : ''}`}
+                            onClick={() => setActiveTab(tab.id)}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
                 </div>
                 <div className="tab-indicator-container">
                     <div
                         className="tab-indicator"
                         style={{
-                            transform: `translateX(${activeTab === 'event' ? '0' : '100%'})`,
+                            width: `${tabWidth}%`,
+                            transform: `translateX(${activeIndex * 100}%)`,
                         }}
                     />
                 </div>
             </div>
+
 
             <div className="table-header">
                 <h3>{activeTab === 'event' ? 'Event' : 'Vendor'} Categories</h3>
@@ -290,7 +297,7 @@ const CategoriesManagement = () => {
                     setShowCreateModal(true);
                 }} className="create-btn-cat">
                     <Plus size={16} />
-                   <span>Create New {activeTab === 'event' ? 'Event' : 'Vendor'} Category</span> 
+                    <span>Create New {activeTab === 'event' ? 'Event' : 'Vendor'} Category</span>
                 </button>
             </div>
 
@@ -309,7 +316,7 @@ const CategoriesManagement = () => {
                         />
                     </div>
                     <div className="filter-sort-container">
-                       
+
                         <div className="sort-dropdown-container">
                             <button
                                 onClick={() => {
@@ -319,17 +326,17 @@ const CategoriesManagement = () => {
                                 className="sort-button"
                             >
                                 <span>Sort by</span>
-                                   <svg
-                  className={`sort-icon ${showSort ? 'active' : ''}`}
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zm0 12.34L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z"
-                  />
-                </svg>
+                                <svg
+                                    className={`sort-icon ${showSort ? 'active' : ''}`}
+                                    viewBox="0 0 24 24"
+                                    width="16"
+                                    height="16"
+                                >
+                                    <path
+                                        fill="currentColor"
+                                        d="M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zm0 12.34L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z"
+                                    />
+                                </svg>
                             </button>
                             {showSort && (
                                 <div className="sort-dropdown-menu">
