@@ -166,7 +166,6 @@ const EventTemplateManager = ({ user }) => {
       {error && <div className="alert error">{error}</div>}
       {success && <div className="alert success">{success}</div>}
 
-      {/* Details Modal */}
       {selectedTemplate && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -428,206 +427,7 @@ const EventTemplateManager = ({ user }) => {
         </div>
       )}
 
-      {/* Form */}
-      {showForm ? (
-        <form onSubmit={handleSubmit} className="template-form">
-          <div className="form-group">
-            <label>Event Type*</label>
-            <select
-              name="event_type_id"
-              value={form.event_type_id}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select type</option>
-              {eventTypes.map(type => (
-                <option key={type.event_type_id} value={type.event_type_id}>
-                  {type.type_name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Template Name*</label>
-            <input
-              name="template_name"
-              value={form.template_name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Description</label>
-            <textarea
-              name="template_description"
-              value={form.template_description}
-              onChange={handleChange}
-              rows={3}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Event Name</label>
-            <input
-              name="default_event_name"
-              value={form.default_event_name}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Event Description</label>
-            <textarea
-              name="default_event_description"
-              value={form.default_event_description}
-              onChange={handleChange}
-              rows={2}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Start Date & Time</label>
-            <input
-              type="datetime-local"
-              name="default_start_datetime"
-              value={form.default_start_datetime}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default End Date & Time</label>
-            <input
-              type="datetime-local"
-              name="default_end_datetime"
-              value={form.default_end_datetime}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Location</label>
-            <input
-              name="default_location"
-              value={form.default_location}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Venue Name</label>
-            <input
-              name="default_venue_name"
-              value={form.default_venue_name}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Address</label>
-            <input
-              name="default_address"
-              value={form.default_address}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default City</label>
-            <input
-              name="default_city"
-              value={form.default_city}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default State</label>
-            <input
-              name="default_state"
-              value={form.default_state}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Country</label>
-            <input
-              name="default_country"
-              value={form.default_country}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Postal Code</label>
-            <input
-              name="default_postal_code"
-              value={form.default_postal_code}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Budget ($)</label>
-            <input
-              name="default_budget"
-              type="number"
-              min="0"
-              step="0.01"
-              value={form.default_budget}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Theme</label>
-            <input
-              name="default_theme"
-              value={form.default_theme}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Default Notes</label>
-            <textarea
-              name="default_notes"
-              value={form.default_notes}
-              onChange={handleChange}
-              rows={2}
-            />
-          </div>
-
-          <div className="form-check">
-            <label>
-              <input
-                type="checkbox"
-                name="is_system_template"
-                checked={form.is_system_template}
-                onChange={handleChange}
-              />
-              System Template
-            </label>
-          </div>
-
-          <div className="form-actions">
-            <button type="submit" className="btn-save">
-              {editingId ? 'Update' : 'Create'}
-            </button>
-            <button
-              type="button"
-              className="btn-cancel"
-              onClick={resetForm}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      ) : (
-        // Table with same classes as VendorApprovals
+    
         <div className="users-table-container">
           <div className="table-responsive">
             <table className="users-table">
@@ -708,7 +508,7 @@ const EventTemplateManager = ({ user }) => {
             </table>
           </div>
         </div>
-      )}
+    
     </div>
   );
 };
