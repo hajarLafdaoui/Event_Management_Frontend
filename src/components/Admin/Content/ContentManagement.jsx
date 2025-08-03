@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import EventTemplateManager from './EventTemplateManager';
-// import TaskTemplateManager from './TaskTemplateManager';
+import TaskTemplateManager from './TaskTemplateManager';
 // import EmailTemplateManager from './EmailTemplateManager';
 // import FAQManager from './FAQManager';
 // import StaticPageManager from './StaticPageManager';
@@ -15,7 +15,7 @@ const ContentManagement = ({ user }) => {
         { id: 'faq', label: 'FAQs' },
         { id: 'static', label: 'Static Pages' }
     ];
-    
+
     // Calculate indicator position
     const activeIndex = tabs.findIndex(tab => tab.id === activeTab);
     const tabWidth = 100 / tabs.length;
@@ -37,11 +37,11 @@ const ContentManagement = ({ user }) => {
                 </div>
                 <div className="tab-indicator-container">
                     <div
-                      className="tab-indicator"
-    style={{
-        width: `${tabWidth}%`,
-        transform: `translateX(${activeIndex * 100}%)`,
-    }}
+                        className="tab-indicator"
+                        style={{
+                            width: `${tabWidth}%`,
+                            transform: `translateX(${activeIndex * 100}%)`,
+                        }}
                     />
                 </div>
             </div>
@@ -49,8 +49,8 @@ const ContentManagement = ({ user }) => {
 
             <div className="tab-content">
                 {activeTab === 'event' && <EventTemplateManager user={user} />}
-                {/* {activeTab === 'task' && <TaskTemplateManager />}
-                {activeTab === 'email' && <EmailTemplateManager />}
+                {activeTab === 'task' && <TaskTemplateManager user={user} />}
+                {/* {activeTab === 'email' && <EmailTemplateManager />}
                 {activeTab === 'faq' && <FAQManager />}
                 {activeTab === 'static' && <StaticPageManager />} */}
             </div>
