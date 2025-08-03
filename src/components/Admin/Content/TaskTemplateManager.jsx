@@ -29,9 +29,7 @@ const TaskTemplateManager = ({ user }) => {
         onConfirm: null,
         message: ''
     });
-
-    // Track open dropdowns using a Set
-    const [openDropdowns, setOpenDropdowns] = useState(new Set());
+    const [dropdownOpen, setDropdownOpen] = useState(null);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -54,11 +52,16 @@ const TaskTemplateManager = ({ user }) => {
             if (templatesRes.data.meta) {
                 setTotalItems(templatesRes.data.meta.total);
                 setTotalPages(templatesRes.data.meta.last_page);
-                setCurrentPage(templatesRes.data.meta.current_page);
+
+                // Prevent loop by only setting if different
+                if (templatesRes.data.meta.current_page !== currentPage) {
+                    setCurrentPage(templatesRes.data.meta.current_page);
+                }
             } else {
                 setTotalItems(templatesRes.data.length);
                 setTotalPages(Math.ceil(templatesRes.data.length / itemsPerPage));
             }
+
         } catch (err) {
             setAlert({
                 message: 'Failed to load data. ' + (err.response?.data?.message || ''),
@@ -84,7 +87,7 @@ const TaskTemplateManager = ({ user }) => {
     };
 
     const handleEdit = (template) => {
-        setEditingId(template.id);
+        setEditingId(template.task_template_id);
         setForm({
             event_type_id: template.event_type_id,
             template_name: template.template_name,
@@ -165,23 +168,15 @@ const TaskTemplateManager = ({ user }) => {
         setSelectedTemplate(null);
     };
 
-    // Toggle specific dropdown
+    // Toggle dropdown for actions (same logic as EventTemplateManager)
     const toggleDropdown = (templateId) => {
-        setOpenDropdowns(prev => {
-            const newSet = new Set(prev);
-            if (newSet.has(templateId)) {
-                newSet.delete(templateId);
-            } else {
-                newSet.add(templateId);
-            }
-            return newSet;
-        });
+        setDropdownOpen(dropdownOpen === templateId ? null : templateId);
     };
 
-    // Close all dropdowns
     const closeAllDropdowns = () => {
-        setOpenDropdowns(new Set());
+        setDropdownOpen(null);
     };
+
 
     // Pagination handlers
     const handlePageChange = (page) => {
@@ -216,10 +211,10 @@ const TaskTemplateManager = ({ user }) => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (!event.target.closest('.actions-dropdown-container')) {
-                closeAllDropdowns();
+                setDropdownOpen(null);
             }
         };
-        
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -488,8 +483,8 @@ const TaskTemplateManager = ({ user }) => {
                                 </tr>
                             ) : (
                                 templates.map(template => (
-                                    <tr key={template.id} className="table-row">
-                                        <td className="table-cell-id">{template.id}</td>
+                                    <tr key={template.task_template_id} className="table-row">
+                                        <td className="table-cell-id">{template.task_template_id}</td>
                                         <td className="table-cell-name">{template.template_name}</td>
                                         <td className="table-cell-role">
                                             <span className="role-badge">
@@ -511,32 +506,29 @@ const TaskTemplateManager = ({ user }) => {
                                             <div className="actions-dropdown-container">
                                                 <button
                                                     className="actions-dropdown-toggle"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        toggleDropdown(template.id);
-                                                    }}
+                                                    onClick={() => toggleDropdown(template.task_template_id)}
                                                 >
                                                     <FiMoreVertical />
                                                 </button>
-                                                {openDropdowns.has(template.id) && (
-                                                    <div className="actions-dropdown" onClick={e => e.stopPropagation()}>
+                                                {dropdownOpen === template.task_template_id && (
+                                                    <div className="actions-dropdown">
                                                         <button
                                                             className="action-btn view-details"
-                                                            onClick={() => handleViewDetails(template)}
+                                                            onClick={() => { handleViewDetails(template); setDropdownOpen(null); }}
                                                         >
                                                             <FiEye className="action-icon" />
                                                             <span>View Details</span>
                                                         </button>
                                                         <button
                                                             className="action-btn edit"
-                                                            onClick={() => handleEdit(template)}
+                                                            onClick={() => { handleEdit(template); setDropdownOpen(null); }}
                                                         >
                                                             <FiEdit className="action-icon" />
                                                             <span>Edit</span>
                                                         </button>
                                                         <button
                                                             className="action-btn delete"
-                                                            onClick={() => handleDelete(template.id)}
+                                                            onClick={() => { handleDelete(template.task_template_id); setDropdownOpen(null); }}
                                                         >
                                                             <FiTrash className="action-icon" />
                                                             <span>Delete</span>
