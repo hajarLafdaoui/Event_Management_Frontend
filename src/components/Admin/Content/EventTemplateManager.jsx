@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../../api/api';
-import { FiEye, FiEdit, FiTrash, FiMoreVertical, FiX, FiPlus } from 'react-icons/fi';
+import { FiEye, FiEdit, FiTrash, FiMoreVertical, FiX, FiPlus, FiChevronLeft, FiChevronRight, FiInfo } from 'react-icons/fi';
+import ConfirmDialog from '../../ReusableComponent/ConfirmDialog';
+import Alert from '../../ReusableComponent/Alert';
 
 const initialForm = {
   event_type_id: '',
@@ -29,24 +31,48 @@ const EventTemplateManager = ({ user }) => {
   const [form, setForm] = useState(initialForm);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [alert, setAlert] = useState({ message: '', type: '' });
+  const [confirmDialog, setConfirmDialog] = useState({ 
+    show: false, 
+    onConfirm: null,
+    message: '' 
+  });
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   // Fetch all data
-  const fetchData = async () => {
+  const fetchData = async (page = 1) => {
     try {
       setLoading(true);
       const [templatesRes, typesRes] = await Promise.all([
-        api.get('/event-templates'),
+        api.get(`/event-templates?page=${page}&per_page=${itemsPerPage}`),
         api.get('/event-types')
       ]);
-      setTemplates(templatesRes.data);
+      
+      setTemplates(templatesRes.data.data || templatesRes.data);
       setEventTypes(typesRes.data);
+      
+      // Set pagination metadata
+      if (templatesRes.data.meta) {
+        setTotalItems(templatesRes.data.meta.total);
+        setTotalPages(templatesRes.data.meta.last_page);
+        setCurrentPage(templatesRes.data.meta.current_page);
+      } else {
+        setTotalItems(templatesRes.data.length);
+        setTotalPages(Math.ceil(templatesRes.data.length / itemsPerPage));
+      }
     } catch (err) {
-      setError('Failed to load data. ' + (err.response?.data?.message || ''));
+      setAlert({ 
+        message: 'Failed to load data. ' + (err.response?.data?.message || ''), 
+        type: 'error' 
+      });
     } finally {
       setLoading(false);
     }
@@ -54,9 +80,9 @@ const EventTemplateManager = ({ user }) => {
 
   useEffect(() => {
     if (user?.role === 'admin') {
-      fetchData();
+      fetchData(currentPage);
     }
-  }, [user]);
+  }, [user, currentPage]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -91,15 +117,28 @@ const EventTemplateManager = ({ user }) => {
     setShowForm(true);
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this template?')) return;
-    try {
-      await api.delete(`/event-templates/${id}`);
-      setSuccess('Template deleted successfully');
-      fetchData();
-    } catch (err) {
-      setError('Delete failed: ' + (err.response?.data?.message || ''));
-    }
+  const handleDelete = (id) => {
+    setConfirmDialog({
+      show: true,
+      message: 'Are you sure you want to delete this template?',
+      onConfirm: async () => {
+        try {
+          await api.delete(`/event-templates/${id}`);
+          setAlert({ 
+            message: 'Template deleted successfully', 
+            type: 'success' 
+          });
+          fetchData(currentPage);
+        } catch (err) {
+          setAlert({ 
+            message: 'Delete failed: ' + (err.response?.data?.message || ''), 
+            type: 'error' 
+          });
+        } finally {
+          setConfirmDialog({ show: false, onConfirm: null, message: '' });
+        }
+      }
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -107,15 +146,24 @@ const EventTemplateManager = ({ user }) => {
     try {
       if (editingId) {
         await api.put(`/event-templates/${editingId}`, form);
-        setSuccess('Template updated successfully');
+        setAlert({ 
+          message: 'Template updated successfully', 
+          type: 'success' 
+        });
       } else {
         await api.post('/event-templates', form);
-        setSuccess('Template created successfully');
+        setAlert({ 
+          message: 'Template created successfully', 
+          type: 'success' 
+        });
       }
       resetForm();
-      fetchData();
+      fetchData(currentPage);
     } catch (err) {
-      setError('Operation failed: ' + (err.response?.data?.message || ''));
+      setAlert({ 
+        message: 'Operation failed: ' + (err.response?.data?.message || ''), 
+        type: 'error' 
+      });
     }
   };
 
@@ -123,7 +171,6 @@ const EventTemplateManager = ({ user }) => {
     setForm(initialForm);
     setEditingId(null);
     setShowForm(false);
-    setError('');
   };
 
   const handleViewDetails = (template) => {
@@ -136,6 +183,37 @@ const EventTemplateManager = ({ user }) => {
 
   const toggleDropdown = (templateId) => {
     setDropdownOpen(dropdownOpen === templateId ? null : templateId);
+  };
+
+  // Pagination handlers
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const renderPageNumbers = () => {
+    const pages = [];
+    const maxPagesToShow = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = startPage + maxPagesToShow - 1;
+    
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`pagination-btn ${currentPage === i ? 'active' : ''}`}
+        >
+          {i}
+        </button>
+      );
+    }
+    
+    return pages;
   };
 
   if (user?.role !== 'admin') {
@@ -151,7 +229,6 @@ const EventTemplateManager = ({ user }) => {
 
   return (
     <div className="event-template-manager">
-
       <div className="table-header">
         <h3>Event Templates</h3>
         <button
@@ -163,9 +240,23 @@ const EventTemplateManager = ({ user }) => {
         </button>
       </div>
 
-      {error && <div className="alert error">{error}</div>}
-      {success && <div className="alert success">{success}</div>}
+      {alert.message && (
+        <Alert
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert({ message: '', type: '' })}
+        />
+      )}
 
+      <ConfirmDialog
+        show={confirmDialog.show}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={() => setConfirmDialog({ show: false, onConfirm: null, message: '' })}
+        message={confirmDialog.message}
+        type="delete"
+      />
+
+      {/* Details Modal - Using VendorApprovalDetail styling */}
       {selectedTemplate && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -173,30 +264,100 @@ const EventTemplateManager = ({ user }) => {
               <h3>Template Details</h3>
               <button className="modal-close-btn" onClick={closeDetails}><FiX /></button>
             </div>
-            <div className="detail-section">
-              <div className="detail-grid">
-                <div className="detail-card">
-                  <div className="detail-row"><span className="detail-label">Name:</span> <span className="detail-value">{selectedTemplate.template_name}</span></div>
-                  <div className="detail-row"><span className="detail-label">Type:</span> <span className="detail-value">{eventTypes.find(et => et.event_type_id === selectedTemplate.event_type_id)?.type_name || 'N/A'}</span></div>
-                  <div className="detail-row"><span className="detail-label">System Template:</span> <span className="detail-value">{selectedTemplate.is_system_template ? 'Yes' : 'No'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Budget:</span> <span className="detail-value">{selectedTemplate.default_budget ? `$${selectedTemplate.default_budget}` : '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Theme:</span> <span className="detail-value">{selectedTemplate.default_theme || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Description:</span> <span className="detail-value">{selectedTemplate.template_description || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Notes:</span> <span className="detail-value">{selectedTemplate.default_notes || '-'}</span></div>
+            <div className="detail-content">
+              <div className="detail-section">
+                <div className="detail-grid">
+                  <div className="detail-card">
+                    <div className="detail-row">
+                      <span className="detail-label">Name:</span>
+                      <span className="detail-value">{selectedTemplate.template_name}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Type:</span>
+                      <span className="detail-value">
+                        <span className="category-badge">
+                          <FiInfo className="detail-icon" />
+                          {eventTypes.find(et => et.event_type_id === selectedTemplate.event_type_id)?.type_name || 'N/A'}
+                        </span>
+                      </span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">System Template:</span>
+                      <span className="detail-value">
+                        <span className={`status-badge ${selectedTemplate.is_system_template ? 'status-active' : 'status-inactive'}`}>
+                          {selectedTemplate.is_system_template ? 'Yes' : 'No'}
+                        </span>
+                      </span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Budget:</span>
+                      <span className="detail-value">{selectedTemplate.default_budget ? `$${selectedTemplate.default_budget}` : '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Theme:</span>
+                      <span className="detail-value">{selectedTemplate.default_theme || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Description:</span>
+                      <span className="detail-value">{selectedTemplate.template_description || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Notes:</span>
+                      <span className="detail-value">{selectedTemplate.default_notes || '-'}</span>
+                    </div>
+                  </div>
+
+                  <div className="detail-card">
+                    <div className="detail-row">
+                      <span className="detail-label">Default Event Name:</span>
+                      <span className="detail-value">{selectedTemplate.default_event_name || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Default Event Description:</span>
+                      <span className="detail-value">{selectedTemplate.default_event_description || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Default Start:</span>
+                      <span className="detail-value">{selectedTemplate.default_start_datetime || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Default End:</span>
+                      <span className="detail-value">{selectedTemplate.default_end_datetime || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Location:</span>
+                      <span className="detail-value">{selectedTemplate.default_location || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Venue Name:</span>
+                      <span className="detail-value">{selectedTemplate.default_venue_name || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Address:</span>
+                      <span className="detail-value">{selectedTemplate.default_address || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">City:</span>
+                      <span className="detail-value">{selectedTemplate.default_city || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">State:</span>
+                      <span className="detail-value">{selectedTemplate.default_state || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Country:</span>
+                      <span className="detail-value">{selectedTemplate.default_country || '-'}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="detail-label">Postal Code:</span>
+                      <span className="detail-value">{selectedTemplate.default_postal_code || '-'}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="detail-card">
-                  <div className="detail-row"><span className="detail-label">Default Event Name:</span> <span className="detail-value">{selectedTemplate.default_event_name || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Default Event Description:</span> <span className="detail-value">{selectedTemplate.default_event_description || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Default Start:</span> <span className="detail-value">{selectedTemplate.default_start_datetime || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Default End:</span> <span className="detail-value">{selectedTemplate.default_end_datetime || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Location:</span> <span className="detail-value">{selectedTemplate.default_location || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Venue Name:</span> <span className="detail-value">{selectedTemplate.default_venue_name || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Address:</span> <span className="detail-value">{selectedTemplate.default_address || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">City:</span> <span className="detail-value">{selectedTemplate.default_city || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">State:</span> <span className="detail-value">{selectedTemplate.default_state || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Country:</span> <span className="detail-value">{selectedTemplate.default_country || '-'}</span></div>
-                  <div className="detail-row"><span className="detail-label">Postal Code:</span> <span className="detail-value">{selectedTemplate.default_postal_code || '-'}</span></div>
-                </div>
+              </div>
+              
+              <div className="button-group">
+                {/* <button onClick={closeDetails} className="close-btn">Close</button> */}
               </div>
             </div>
           </div>
@@ -427,88 +588,116 @@ const EventTemplateManager = ({ user }) => {
         </div>
       )}
 
-    
-        <div className="users-table-container">
-          <div className="table-responsive">
-            <table className="users-table">
-              <thead className="table-header">
+      <div className="users-table-container">
+        <div className="table-responsive">
+          <table className="users-table">
+            <thead className="table-header">
+              <tr>
+                <th className="table-header-id">ID</th>
+                <th className="table-header-name">Template Name</th>
+                <th className="table-header-role">Event Type</th>
+                <th className="table-header-email">Budget</th>
+                <th className="table-header-status">System</th>
+                <th className="table-header-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="table-body">
+              {templates.length === 0 ? (
                 <tr>
-                  <th className="table-header-id">ID</th>
-                  <th className="table-header-name">Template Name</th>
-                  <th className="table-header-role">Event Type</th>
-                  <th className="table-header-email">Budget</th>
-                  <th className="table-header-status">System</th>
-                  <th className="table-header-actions">Actions</th>
+                  <td colSpan="6" className="no-results">
+                    No templates found
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="table-body">
-                {templates.length === 0 ? (
-                  <tr>
-                    <td colSpan="6" className="no-results">
-                      No templates found
+              ) : (
+                templates.map(template => (
+                  <tr key={template.template_id} className="table-row">
+                    <td className="table-cell-id">{template.template_id}</td>
+                    <td className="table-cell-name">{template.template_name}</td>
+                    <td className="table-cell-role">
+                      <span className="role-badge">
+                        {eventTypes.find(et => et.event_type_id === template.event_type_id)?.type_name || 'N/A'}
+                      </span>
+                    </td>
+                    <td className="table-cell-email">
+                      {template.default_budget ? `$${template.default_budget}` : '-'}
+                    </td>
+                    <td className="table-cell-status">
+                      <span className={`status-badge ${template.is_system_template ? 'approved' : 'pending'}`}>
+                        {template.is_system_template ? 'System' : 'Custom'}
+                      </span>
+                    </td>
+                    <td className="table-cell-actions">
+                      <div className="actions-dropdown-container">
+                        <button
+                          className="actions-dropdown-toggle"
+                          onClick={() => toggleDropdown(template.template_id)}
+                        >
+                          <FiMoreVertical />
+                        </button>
+                        {dropdownOpen === template.template_id && (
+                          <div className="actions-dropdown">
+                            <button
+                              className="action-btn view-details"
+                              onClick={() => { handleViewDetails(template); setDropdownOpen(null); }}
+                            >
+                              <FiEye className="action-icon" />
+                              <span>View Details</span>
+                            </button>
+                            <button
+                              className="action-btn edit"
+                              onClick={() => { handleEdit(template); setDropdownOpen(null); }}
+                            >
+                              <FiEdit className="action-icon" />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              className="action-btn delete"
+                              onClick={() => { handleDelete(template.template_id); setDropdownOpen(null); }}
+                            >
+                              <FiTrash className="action-icon" />
+                              <span>Delete</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </td>
                   </tr>
-                ) : (
-                  templates.map(template => (
-                    <tr key={template.template_id} className="table-row">
-                      <td className="table-cell-id">{template.template_id}</td>
-                      <td className="table-cell-name">{template.template_name}</td>
-                      <td className="table-cell-role">
-                        <span className="role-badge">
-                          {eventTypes.find(et => et.event_type_id === template.event_type_id)?.type_name || 'N/A'}
-                        </span>
-                      </td>
-                      <td className="table-cell-email">
-                        {template.default_budget ? `$${template.default_budget}` : '-'}
-                      </td>
-                      <td className="table-cell-status">
-                        <span className={`status-badge ${template.is_system_template ? 'approved' : 'pending'}`}>
-                          {template.is_system_template ? 'System' : 'Custom'}
-                        </span>
-                      </td>
-                      <td className="table-cell-actions">
-                        <div className="actions-dropdown-container">
-                          <button
-                            className="actions-dropdown-toggle"
-                            onClick={() => toggleDropdown(template.template_id)}
-                          >
-                            <FiMoreVertical />
-                          </button>
-                          {dropdownOpen === template.template_id && (
-                            <div className="actions-dropdown">
-                              <button
-                                className="action-btn view-details"
-                                onClick={() => { handleViewDetails(template); setDropdownOpen(null); }}
-                              >
-                                <FiEye className="action-icon" />
-                                <span>View Details</span>
-                              </button>
-                              <button
-                                className="action-btn edit"
-                                onClick={() => { handleEdit(template); setDropdownOpen(null); }}
-                              >
-                                <FiEdit className="action-icon" />
-                                <span>Edit</span>
-                              </button>
-                              <button
-                                className="action-btn delete"
-                                onClick={() => { handleDelete(template.template_id); setDropdownOpen(null); }}
-                              >
-                                <FiTrash className="action-icon" />
-                                <span>Delete</span>
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
-    
+        
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="pagination-container">
+            <div className="pagination-controls">
+              <button
+                className="pagination-btn"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <FiChevronLeft />
+              </button>
+              
+              {renderPageNumbers()}
+              
+              <button
+                className="pagination-btn"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                <FiChevronRight />
+              </button>
+            </div>
+            
+            <div className="pagination-info">
+              Showing {(currentPage - 1) * itemsPerPage + 1} to{' '}
+              {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} entries
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
